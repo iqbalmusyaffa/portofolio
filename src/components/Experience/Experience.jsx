@@ -29,15 +29,6 @@ const Experience = () => {
     },
   };
 
-  const dotVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    show: {
-      scale: 1,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 260, damping: 20 },
-    },
-  };
-
   const cardVariants = (from = "left") => {
     const x = shouldReduceMotion ? 0 : from === "left" ? -40 : 40;
     return {
@@ -81,9 +72,9 @@ const Experience = () => {
 
       {/* Timeline wrapper */}
       <div className="relative">
-        {/* Vertical line (animated grow) */}
+        {/* Garis vertikal tetap ada */}
         <motion.div
-          className="absolute sm:left-1/2 left-0 transform -translate-x-1/2 sm:-translate-x-0 w-[3px] bg-white/80 h-full rounded"
+          className="pointer-events-none absolute sm:left-1/2 left-0 transform -translate-x-1/2 sm:-translate-x-0 w-[3px] bg-white/60 h-full rounded z-0"
           variants={lineVariants}
         />
 
@@ -99,19 +90,6 @@ const Experience = () => {
                 isEven ? "sm:justify-end" : "sm:justify-start"
               }`}
             >
-              {/* Timeline Dot / Avatar */}
-              <motion.div
-                className="absolute sm:left-1/2 left-0 transform -translate-x-1/2 bg-gray-400 border-4 border-[#8245ec] w-12 h-12 sm:w-16 sm:h-16 rounded-full flex justify-center items-center z-10 overflow-hidden"
-                variants={dotVariants}
-              >
-                <img
-                  src={experience.img}
-                  alt={`${experience.company} logo`}
-                  className="w-full h-full object-cover rounded-full"
-                  loading="lazy"
-                />
-              </motion.div>
-
               {/* Card */}
               <motion.div
                 variants={cardVariants(side)}
@@ -119,16 +97,16 @@ const Experience = () => {
                 whileInView="show"
                 whileHover="hover"
                 viewport={{ once: true, amount: 0.2 }}
-                className={`w-full sm:max-w-md p-4 sm:p-8 rounded-2xl border border-white/10 bg-gray-900/80 backdrop-blur-md shadow-[0_0_20px_1px_rgba(130,69,236,0.2)] ${
-                  isEven ? "sm:ml-0" : "sm:mr-0"
-                } sm:ml-44 sm:mr-44 ml-8`}
+                className={`relative z-10 w-full sm:max-w-md p-4 sm:p-8 rounded-2xl border border-white/10
+                bg-gray-900/80 backdrop-blur-md shadow-[0_0_20px_1px_rgba(130,69,236,0.2)]
+                ${isEven ? "sm:ml-0" : "sm:mr-0"} sm:ml-20 sm:mr-20 ml-8`}
               >
                 {/* Header (logo + text) */}
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 bg-white rounded-md overflow-hidden shrink-0">
                     <img
                       src={experience.img}
-                      alt={`${experience.company} logo small`}
+                      alt={`${experience.company} logo`}
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />
@@ -151,7 +129,7 @@ const Experience = () => {
 
                 {/* Description */}
                 <motion.p
-                  className="mt-4 text-gray-400 leading-relaxed"
+                  className="mt-4 text-gray-300 leading-relaxed"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 0.1, duration: 0.4 }}

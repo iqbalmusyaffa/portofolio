@@ -17,18 +17,15 @@ import githubLogo from "./assets/tech_logo/github.png";
 import vscodeLogo from "./assets/tech_logo/vscode.png";
 import postmanLogo from "./assets/tech_logo/postman.png";
 import figmaLogo from "./assets/tech_logo/figma.png";
-import netlifyLogo from "./assets/tech_logo/netlify.png";
 import vercelLogo from "./assets/tech_logo/vercel.png";
 
 // Experience Section Logo's
-import webverseLogo from "./assets/company_logo/webverse_logo.png";
-import agcLogo from "./assets/company_logo/agc_logo.png";
-import newtonschoolLogo from "./assets/company_logo/newtonschool_logo.png";
+import maxyLogo from "./assets/company_logo/maxy.png";
+import pastijadiLogo from "./assets/company_logo/pastijadi2.jpg";
 
 // Education Section Logo's
-import glaLogo from "./assets/education_logo/gla_logo.png";
-import bsaLogo from "./assets/education_logo/bsa_logo.png";
-import vpsLogo from "./assets/education_logo/vps_logo.png";
+import telkomLogo from "./assets/education_logo/logotelkom.png";
+import smanLogo from "./assets/education_logo/sman2.png";
 
 // Project Section Logo's
 import githubdetLogo from "./assets/work_logo/github_det.png";
@@ -40,6 +37,7 @@ import webverLogo from "./assets/work_logo/web_dig.png";
 import cmLogo from "./assets/work_logo/cm.png";
 import imagesearchLogo from "./assets/work_logo/image_search.png";
 import removebgLogo from "./assets/work_logo/remove_bg.png";
+import { i } from "framer-motion/client";
 
 export const SkillsInfo = [
   {
@@ -88,90 +86,57 @@ export const SkillsInfo = [
 export const experiences = [
   {
     id: 0,
-    img: webverseLogo,
-    role: "Backend Developer",
-    company: " PT. Linkdataku Solusi Indonesia (Maxy Academy)",
+    img: maxyLogo,
+    role: "Backend Developer (Bootcamp Project)",
+    company: "PT. Linkdataku Solusi Indonesia (Maxy Academy)",
     date: "April 2024 - July 2024",
-    desc: "Sebagai backend developer, saya berfokus pada pembangunan API yang kokoh dan skalabel untuk mendukung aplikasi koperasi Deus Code. Saya menggunakan framework populer seperti Node.js",
+    desc: "Sebagai backend developer dalam program bootcamp Maxy Academy, saya berfokus pada pembangunan API yang kokoh dan skalabel untuk mendukung aplikasi koperasi Deus Code. Menggunakan framework populer seperti Node.js dan menerapkan arsitektur RESTful untuk memastikan integrasi frontend yang efisien.",
     skills: [
       "HTML",
       "CSS",
       "JavaScript",
-      "React JS",
-      "TypeScript",
+      "laravel",
       "Node JS",
-      "Tailwind CSS",
-      "MongoDb",
-      "Redux",
-      " Next Js",
-    ],
-  },
-  {
-    id: 1,
-    img: agcLogo,
-    role: "Fullstack Engineer",
-    company: "Agumentik Group of Companies",
-    date: "July 2023 - March 2024",
-    desc: "Contributed to innovative projects as a Fullstack Engineer, leading both frontend and backend development using technologies such as HTML, CSS, JavaScript, PHP, SQL, Bootstrap, and ReactJS. Worked closely with the team to deliver responsive, high-performance web applications and improve user experience through seamless integration of various technologies.",
-    skills: [
-      "ReactJS",
-      "Redux",
-      "JavaScript",
-      "Tailwind CSS",
-      "HTML",
-      "CSS",
-      "SQL",
+      "MySQL",
+      "Postman",
+      "Git",
+      "GitHub",
     ],
   },
   {
     id: 2,
-    img: newtonschoolLogo,
-    role: "Frontend Intern",
-    company: "Newton School",
-    date: "September 2021 - August 2022",
-    desc: "Worked as a Frontend Developer Intern, designing and implementing scalable UI components and responsive websites using HTML, CSS, JavaScript, Bootstrap, and Material UI. Collaborated with the design team to translate wireframes and prototypes from Figma into interactive, user-friendly web pages.",
-    skills: ["HTML", "CSS", "Javascript", "Bootstrap", "Figma", "Material UI"],
+    img: pastijadiLogo,
+    role: "Full Stack Developer (Internship)",
+    company: "PT PastiDjadi",
+    date: "Juni 2024 - November 2024",
+    desc: "Sebagai Full Stack Developer Intern, saya bertanggung jawab dalam pengembangan end-to-end aplikasi web, mulai dari pembuatan antarmuka pengguna yang responsif menggunakan HTML, CSS, JavaScript, dan Bootstrap, hingga pengelolaan logika backend dengan PHP dan Laravel.",
+    skills: ["HTML", "CSS", "Javascript", "Bootstrap", "Git", "GitHub", "laravel","PHP"],
   },
 ];
 
 export const education = [
   {
     id: 0,
-    img: glaLogo,
-    school: "GLA University, Mathura",
-    date: "Sept 2022 - July 2024",
-    grade: "7.81 CGPA",
-    desc: "I have completed my Master's degree (MCA) in Computer Applications from GLA University, Mathura. During my time at GLA, I gained a strong foundation in programming, software development, and computer science principles. I have studied courses such as Data Structures, Algorithms, Object-Oriented Programming, Database Management Systems, Web Development, and Software Engineering. I actively participated in various workshops and technical events, which enhanced my skills and knowledge. My experience at GLA University has been instrumental in shaping my technical abilities and professional growth.",
-    degree: "Master of Computer Applications - MCA",
+    img: telkomLogo,
+    school: "Universitas Telkom Surabaya",
+    degree: "Sarjana S1 Sistem Informasi",
+    date: "2021 - 2025",
+    grade: "IPK: 3.4 / 4.0",
+    desc: "Selama masa studi, saya terlibat dalam beberapa proyek pengembangan yang memperkuat keahlian saya. Saya berperan sebagai Back-End Developer untuk website 'Kampung Bebek', di mana saya menggunakan Laravel dan MySQL untuk membangun platform dan berhasil meningkatkan visibilitasnya melalui strategi SEO.",
+    location: "Surabaya",
   },
   {
     id: 1,
-    img: bsaLogo,
-    school: "BSA College, Mathura",
-    date: "Sept 2018 - Aug 2021",
-    grade: "73.2%",
-    desc: "I completed my Bachelor's degree in Computer Science (B.Sc.) from BSA College, Mathura. Throughout my studies, I was immersed in a variety of subjects that deepened my understanding of computing and technology. From exploring Data Structures and Algorithms to diving into Web Development and Database Management Systems, I gained practical insights into the world of software development. My time at BSA College allowed me to work on projects that applied theoretical concepts to real-world problems.",
-    degree: "Bachelor of Science - BSC (Computer Science)",
-  },
-  {
-    id: 2,
-    img: vpsLogo,
-    school: "Vatsalya Public School Govardhan, Mathura",
-    date: "Apr 2017 - March 2018",
-    grade: "78%",
-    desc: "I completed my class 12 education from Vatsalya Public School, Govardhan, under the CBSE board, where I studied Physics, Chemistry, and Mathematics (PCM) with Computer Science.",
-    degree: "CBSE(XII) - PCM with Computer Science",
-  },
-  {
-    id: 3,
-    img: vpsLogo,
-    school: "Vatsalya Public School Govardhan, Mathura",
-    date: "Apr 2015 - March 2016",
-    grade: "87.5%",
-    desc: "I completed my class 10 education from Vatsalya Public School, Govardhan, under the CBSE board, where I studied Science with Computer.",
-    degree: "CBSE(X), Science with Computer Application",
+    img: smanLogo,
+    school: "SMA Negeri 2 Taruna Bhayangkara",
+    degree: "SMA/Sederajat IPS",
+    date: "2018 - 2021",
+    grade: "IPK: 86.00",
+    desc: "Menyelesaikan pendidikan menengah atas di jurusan Ilmu Pengetahuan Sosial dengan fokus pada disiplin, kepemimpinan, dan kerja sama tim melalui berbagai kegiatan sekolah.",
+    location: "Banyuwangi",
   },
 ];
+
 
 export const projects = [
   {

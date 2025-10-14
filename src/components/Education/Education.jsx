@@ -1,82 +1,105 @@
 import React from "react";
-import { education } from "../../constants"; // Import the education data
+import { motion, useReducedMotion } from "framer-motion";
+import { education } from "../../constants";
 
 const Education = () => {
+  const prefersReduced = useReducedMotion();
+
+  const sectionVariants = {
+    hidden: { opacity: 0, y: prefersReduced ? 0 : 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const lineVariants = {
+    hidden: { scaleY: 0, opacity: 0, originY: 0 },
+    show: {
+      scaleY: 1,
+      opacity: 1,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: prefersReduced ? 0 : 20, scale: 0.98 },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+  };
+
   return (
-    <section
+    <motion.section
       id="education"
-      className="py-24 pb-24 px-[12vw] md:px-[7vw] lg:px-[16vw] font-sans bg-skills-gradient clip-path-custom-3"
+      className="py-24 px-[8vw] md:px-[6vw] lg:px-[12vw] font-sans bg-[#090815] clip-path-custom-3"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.15 }}
+      variants={sectionVariants}
     >
       {/* Section Title */}
-      <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold text-white">EDUCATION</h2>
-        <div className="w-32 h-1 bg-purple-500 mx-auto mt-4"></div>
-        <p className="text-gray-400 mt-4 text-lg font-semibold">
-          My education has been a journey of learning and development. Here are the details of my academic background
+      <motion.div className="text-center mb-16" variants={cardVariants}>
+        <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">EDUCATION</h2>
+        <div className="w-24 md:w-32 h-1 bg-[#8245ec] mx-auto mt-4 rounded-full"></div>
+        <p className="text-gray-400 mt-4 text-base sm:text-lg max-w-3xl mx-auto font-medium">
+          My education has been a journey of learning and growth. Here’s a look at my academic background and achievements.
         </p>
-      </div>
+      </motion.div>
 
-      {/* Education Timeline */}
+      {/* Timeline */}
       <div className="relative">
-        {/* Vertical line */}
-        <div className="absolute sm:left-1/2 left-0 transform -translate-x-1/2 sm:-translate-x-0 w-1 bg-white h-full"></div>
+        {/* Clean professional line */}
+        <motion.div
+          className="hidden md:block absolute left-1/2 -translate-x-1/2 w-px h-full"
+          variants={lineVariants}
+        >
+          <div className="h-full bg-gradient-to-b from-transparent via-[#8245ec]/40 to-transparent" />
+        </motion.div>
 
         {/* Education Entries */}
-        {education.map((edu, index) => (
-          <div
-            key={edu.id}
-            className={`flex flex-col sm:flex-row items-center mb-16 ${
-              index % 2 === 0 ? "sm:justify-start" : "sm:justify-end"
-            }`}
-          >
-            {/* Timeline Circle */}
-            <div className="absolute sm:left-1/2 left-0 transform -translate-x-1/2 bg-gray-400 border-4 border-[#8245ec] w-12 h-12 sm:w-16 sm:h-16 rounded-full flex justify-center items-center z-10">
-              <img
-                src={edu.img}
-                alt={edu.school}
-                className="w-full h-full object-cover rounded-full"
-              />
-            </div>
-
-            {/* Content Section */}
-            <div
-              className={`w-full sm:max-w-md p-4 sm:p-8 rounded-2xl shadow-2xl border border-white bg-gray-900 backdrop-blur-md shadow-[0_0_20px_1px_rgba(130,69,236,0.3)] ${
-                index % 2 === 0 ? "sm:ml-0" : "sm:mr-0"
-              } sm:ml-44 sm:mr-44 ml-8 transform transition-transform duration-300 hover:scale-105`}
+        <ul className="space-y-12 md:space-y-20">
+          {education.map((edu, index) => (
+            <motion.li
+              key={edu.id}
+              variants={cardVariants}
+              whileHover={{ scale: prefersReduced ? 1 : 1.02 }}
+              className={`relative w-full md:w-[48%] p-6 sm:p-8 rounded-2xl border border-white/5 bg-[#0b0a1a]/80 shadow-[0_8px_24px_rgba(2,6,23,0.45)] backdrop-blur-md transition-transform duration-300 hover:shadow-[0_0_40px_rgba(130,69,236,0.3)] ${
+                index % 2 === 0 ? "md:ml-auto md:mr-[52%]" : "md:mr-auto md:ml-[52%]"
+              }`}
             >
-              {/* Flex container for image and text */}
-              <div className="flex items-center space-x-6">
-                {/* School Logo/Image */}
-                <div className="w-24 h-16 bg-white rounded-md overflow-hidden">
-                  <img
-                    src={edu.img}
-                    alt={edu.school}
-                    className="w-full h-full object-cover"
-                  />
+              <div className="flex items-start sm:items-center gap-4 sm:gap-6">
+                <div className="w-20 h-16 sm:w-24 sm:h-20 bg-white rounded-md overflow-hidden shrink-0">
+                  <img src={edu.img} alt={edu.school} className="w-full h-full object-cover" />
                 </div>
-
-                {/* Degree, School Name, and Date */}
-                <div className="flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-xl sm:text-xl font-semibold text-white">
-                      {edu.degree}
-                    </h3>
-                    <h4 className="text-md sm:text-sm text-gray-300">
-                      {edu.school}
-                    </h4>
-                  </div>
-                  {/* Date at the bottom */}
-                  <p className="text-sm text-gray-500 mt-2">{edu.date}</p>
+                <div>
+                  <h3 className="text-lg sm:text-xl font-semibold text-white">{edu.degree}</h3>
+                  <p className="text-sm sm:text-base text-gray-300">{edu.school}</p>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-1">{edu.date}</p>
                 </div>
               </div>
 
-              <p className="mt-4 text-gray-400 font-bold">Grade: {edu.grade}</p>
-              <p className="mt-4 text-gray-400">{edu.desc}</p>
-            </div>
-          </div>
-        ))}
+              {edu.grade && (
+                <p className="mt-4 text-gray-400 font-semibold">
+                  <span className="text-white/90">Grade:</span> {edu.grade}
+                </p>
+              )}
+              {edu.desc && (
+                <p className="mt-3 text-gray-300 leading-relaxed">{edu.desc}</p>
+              )}
+            </motion.li>
+          ))}
+        </ul>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

@@ -14,18 +14,19 @@ const MENU = [
   { id: "about", label: "About" },
   { id: "skills", label: "Skills" },
   { id: "experience", label: "Experience" },
-  { id: "work", label: "Projects" },
   { id: "education", label: "Education" },
+  { id: "work", label: "Projects" },
 ];
 const BRAND = { first: "Iqbal", last: "Musyaffa" };
 const ACCENT = "#8245ec";
 
 /* ======= Utility: prefers-reduced-motion ======= */
-function useReducedMotion() {
+function useReducedMotionPref() {
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
     const m = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReduced(m.matches);
+    const update = () => setReduced(!!m.matches);
     update();
     m.addEventListener?.("change", update);
     return () => m.removeEventListener?.("change", update);
@@ -37,13 +38,13 @@ function useReducedMotion() {
 function useElementHeight(ref) {
   const [h, setH] = useState(0);
   useEffect(() => {
-    if (!ref.current) return;
+    if (!ref.current || typeof ResizeObserver === "undefined") return;
     const el = ref.current;
     const ro = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const newH = Math.ceil(entry.contentRect.height);
-        setH(newH);
-      }
+      const entry = entries[0];
+      if (!entry) return;
+      const newH = Math.ceil(entry.contentRect.height);
+      setH((prev) => (prev !== newH ? newH : prev));
     });
     ro.observe(el);
     return () => ro.disconnect();
@@ -51,27 +52,46 @@ function useElementHeight(ref) {
   return h;
 }
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  const navRef = useRef(null);
-  const mobilePanelRef = useRef(null);
-  const toggleRef = useRef(null);
-  const firstFocusableRef = useRef(null); // untuk trap fokus
-  const lastFocusableRef = useRef(null);
-
-  const navHeight = useElementHeight(navRef);
-  const reducedMotion = useReducedMotion();
-
-  /* ======= Scroll background toggle ======= */
+/* ======= Utility: rAF-backed scroll state ======= */
+function useRafScrollFlag(offset = 50) {
+  const [flag, setFlag] = useState(false);
+  const ticking = useRef(false);
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 50);
+    const onScroll = () => {
+      if (ticking.current) return;
+      ticking.current = true;
+      requestAnimationFrame(() => {
+        const next = window.scrollY > offset;
+        setFlag((prev) => (prev !== next ? next : prev));
+        ticking.current = false;
+      });
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [offset]);
+  return flag;
+}
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState(MENU[0]?.id || "");
+  const navRef = useRef(null);
+  const mobilePanelRef = useRef(null);
+  const toggleRef = useRef(null);
+
+  const navHeight = useElementHeight(navRef);
+  const reducedMotion = useReducedMotionPref();
+  const isScrolled = useRafScrollFlag(50);
+
+  /* ======= Apply scroll-margin-top to targets (kompensasi nav) ======= */
+  useEffect(() => {
+    const offset = navHeight + 10; // kecilkan atau besarkan sesuai selera
+    MENU.forEach((m) => {
+      const el = document.getElementById(m.id);
+      if (el) el.style.scrollMarginTop = `${offset}px`;
+    });
+  }, [navHeight]);
 
   /* ======= Active section highlight (IntersectionObserver) ======= */
   useEffect(() => {
@@ -80,18 +100,23 @@ export default function Navbar() {
     );
     if (!sections.length) return;
 
-    // Root margin: kompensasi tinggi nav, + ruang bawah agar highlight tidak “telat”
+    // rootMargin: top kompensasi navbar, bottom biar pindahnya stabil
     const topOffset = navHeight + 12;
-    const bottomOffset = Math.max(window.innerHeight * 0.4, 240);
+    const bottomOffset = Math.max(window.innerHeight * 0.35, 220);
 
     const io = new IntersectionObserver(
       (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActiveSection(e.target.id);
-        });
+        // pilih yang rasio interseksi paling tinggi
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) {
+          const id = visible[0].target.id;
+          if (id !== activeSection) setActiveSection(id);
+        }
       },
       {
-        threshold: 0.4,
+        threshold: [0.25, 0.4, 0.6, 0.8],
         root: null,
         rootMargin: `-${topOffset}px 0px -${bottomOffset}px 0px`,
       }
@@ -99,52 +124,30 @@ export default function Navbar() {
 
     sections.forEach((s) => io.observe(s));
     return () => io.disconnect();
+    // jangan masukkan activeSection ke deps agar IO tidak recreate berulang
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navHeight]);
 
-  /* ======= Smooth scroll dengan kompensasi nav ======= */
+  /* ======= Smooth scroll ======= */
   const goTo = useCallback(
     (id) => {
       setIsOpen(false);
       const el = document.getElementById(id);
       if (!el) return;
-      const top =
-        el.getBoundingClientRect().top + window.pageYOffset - (navHeight + 10);
-      window.scrollTo({
-        top,
+      // karena kita sudah set scrollMarginTop, cukup call scrollIntoView
+      el.scrollIntoView({
         behavior: reducedMotion ? "auto" : "smooth",
+        block: "start",
       });
     },
-    [navHeight, reducedMotion]
+    [reducedMotion]
   );
 
   /* ======= ESC & klik di luar untuk menutup ======= */
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") setIsOpen(false);
-      // Trap focus saat panel terbuka
-      if (isOpen && e.key === "Tab") {
-        const panel = mobilePanelRef.current;
-        if (!panel) return;
-        const focusables = panel.querySelectorAll(
-          'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
-        );
-        const f = Array.from(focusables).filter(
-          (el) =>
-            !el.hasAttribute("disabled") && !el.getAttribute("aria-hidden")
-        );
-        if (f.length === 0) return;
-        const first = f[0];
-        const last = f[f.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
-          last.focus();
-          e.preventDefault();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          first.focus();
-          e.preventDefault();
-        }
-      }
     };
-
     const onPointerDown = (e) => {
       if (!isOpen) return;
       const target = e.target;
@@ -152,9 +155,8 @@ export default function Navbar() {
       if (mobilePanelRef.current?.contains(target)) return;
       setIsOpen(false);
     };
-
     document.addEventListener("keydown", onKey);
-    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("pointerdown", onPointerDown, { passive: true });
     return () => {
       document.removeEventListener("keydown", onKey);
       document.removeEventListener("pointerdown", onPointerDown);
@@ -165,7 +167,9 @@ export default function Navbar() {
   useEffect(() => {
     const original = document.body.style.overflow;
     document.body.style.overflow = isOpen ? "hidden" : original || "";
-    return () => (document.body.style.overflow = original);
+    return () => {
+      document.body.style.overflow = original;
+    };
   }, [isOpen]);
 
   /* ======= Framer Motion variants ======= */
@@ -175,7 +179,7 @@ export default function Navbar() {
       show: {
         y: 0,
         opacity: 1,
-        transition: { duration: reducedMotion ? 0 : 0.35, ease: "easeOut" },
+        transition: { duration: reducedMotion ? 0 : 0.3, ease: "easeOut" },
       },
     }),
     [reducedMotion]
@@ -183,13 +187,13 @@ export default function Navbar() {
 
   const itemVariants = useMemo(
     () => ({
-      initial: { y: 10, opacity: 0 },
+      initial: { y: 8, opacity: 0 },
       show: (i) => ({
         y: 0,
         opacity: 1,
         transition: {
-          delay: reducedMotion ? 0 : 0.05 * i,
-          duration: reducedMotion ? 0 : 0.25,
+          delay: reducedMotion ? 0 : 0.04 * i,
+          duration: reducedMotion ? 0 : 0.2,
           ease: "easeOut",
         },
       }),
@@ -197,7 +201,7 @@ export default function Navbar() {
     [reducedMotion]
   );
 
-  /* ======= Skip link untuk aksesibilitas ======= */
+  /* ======= Skip link ======= */
   const SkipLink = (
     <a
       href="#main"
@@ -214,14 +218,13 @@ export default function Navbar() {
         ref={navRef}
         role="navigation"
         aria-label="Main Navigation"
-        className={`fixed top-0 w-full z-[9999] overflow-visible transition
+        className={`fixed top-0 w-full z-[9999] transition
           px-[7vw] md:px-[7vw] lg:px-[20vw]
           ${
             isScrolled
               ? "bg-[#050414]/60 backdrop-blur-md shadow-md"
               : "bg-transparent"
-          }
-        `}
+          }`}
         variants={navVariants}
         initial="initial"
         animate="show"
@@ -230,11 +233,11 @@ export default function Navbar() {
           {/* Logo/Brand */}
           <motion.button
             type="button"
-            onClick={() => goTo("about")}
+            onClick={() => goTo(MENU[0].id)}
             className="text-lg md:text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-[--accent] rounded"
             whileTap={reducedMotion ? undefined : { scale: 0.98 }}
             style={{ ["--accent"]: ACCENT }}
-            aria-label="Go to About"
+            aria-label={`Go to ${MENU[0].label}`}
           >
             <span style={{ color: ACCENT }}>&lt;</span>
             <span className="text-white">{BRAND.first}</span>
@@ -244,48 +247,48 @@ export default function Navbar() {
           </motion.button>
 
           {/* Desktop Menu */}
-          <ul className="hidden md:flex items-center gap-8 text-gray-300">
-            {MENU.map((m, i) => (
-              <motion.li
-                key={m.id}
-                custom={i}
-                variants={itemVariants}
-                initial="initial"
-                animate="show"
-              >
-                <motion.button
-                  type="button"
-                  onClick={() => goTo(m.id)}
-                  className={`relative px-1 py-1 transition
-                    ${
-                      activeSection === m.id
-                        ? "text-[--accent]"
-                        : "hover:text-[--accent]"
-                    }
-                    focus:outline-none focus:ring-2 focus:ring-[--accent] rounded
-                  `}
-                  whileHover={reducedMotion ? undefined : { y: -1 }}
-                  whileTap={reducedMotion ? undefined : { scale: 0.98 }}
-                  aria-current={activeSection === m.id ? "page" : undefined}
-                  style={{ ["--accent"]: ACCENT }}
+          <ul className="relative hidden md:flex items-center gap-8 text-gray-300">
+            {MENU.map((m, i) => {
+              const isActive = activeSection === m.id;
+              return (
+                <motion.li
+                  key={m.id}
+                  custom={i}
+                  variants={itemVariants}
+                  initial="initial"
+                  animate="show"
+                  className="relative"
                 >
-                  {m.label}
-                  {/* underline anim */}
-                  <motion.span
-                    layoutId="underline"
-                    className={`absolute left-0 -bottom-1 h-0.5 bg-[--accent] ${
-                      activeSection === m.id ? "w-full" : "w-0"
-                    }`}
-                    transition={
-                      reducedMotion
-                        ? { duration: 0 }
-                        : { type: "spring", stiffness: 400, damping: 30 }
-                    }
+                  <motion.button
+                    type="button"
+                    onClick={() => goTo(m.id)}
+                    className={`relative px-1 py-1 transition ${
+                      isActive ? "text-[--accent]" : "hover:text-[--accent]"
+                    } focus:outline-none focus:ring-2 focus:ring-[--accent] rounded`}
+                    whileHover={reducedMotion ? undefined : { y: -1 }}
+                    whileTap={reducedMotion ? undefined : { scale: 0.98 }}
+                    aria-current={isActive ? "page" : undefined}
                     style={{ ["--accent"]: ACCENT }}
-                  />
-                </motion.button>
-              </motion.li>
-            ))}
+                  >
+                    {m.label}
+                    {/* HANYA render underline saat aktif
+                        agar shared-layoutId benar2 berpindah */}
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-underline"
+                        className="absolute left-0 -bottom-1 h-0.5 bg-[--accent] w-full"
+                        transition={
+                          reducedMotion
+                            ? { duration: 0 }
+                            : { type: "spring", stiffness: 420, damping: 28 }
+                        }
+                        style={{ ["--accent"]: ACCENT }}
+                      />
+                    )}
+                  </motion.button>
+                </motion.li>
+              );
+            })}
 
             {/* Socials */}
             <motion.li
@@ -323,11 +326,7 @@ export default function Navbar() {
           </ul>
 
           {/* Mobile Toggle */}
-          <div
-            className={`md:hidden relative z-[10001] pointer-events-auto
-    ${isOpen ? "opacity-0 pointer-events-none" : "opacity-100"}`}
-            aria-hidden={isOpen}
-          >
+          <div className="md:hidden relative z-[10001]">
             <motion.button
               ref={toggleRef}
               type="button"
@@ -348,7 +347,6 @@ export default function Navbar() {
         <AnimatePresence>
           {isOpen && (
             <>
-              {/* Backdrop */}
               <motion.div
                 key="backdrop"
                 initial={{ opacity: 0 }}
@@ -359,7 +357,6 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}
                 aria-hidden="true"
               />
-              {/* Panel */}
               <motion.aside
                 key="panel"
                 ref={mobilePanelRef}
@@ -372,7 +369,7 @@ export default function Navbar() {
                   ease: "easeOut",
                 }}
                 className="
-                  fixed right-0 top-0 z-[10000] h-[100dvh] w-[82%] max-w-[360px]
+                  fixed right-0 top-0 z[10000] h-[100dvh] w-[82%] max-w-[360px]
                   md:hidden bg-[#0b0a1a]/95 border-l border-white/10
                   backdrop-blur-xl shadow-2xl
                   pt-[calc(env(safe-area-inset-top)+16px)] pb-[calc(env(safe-area-inset-bottom)+16px)]
@@ -383,18 +380,13 @@ export default function Navbar() {
                 aria-modal="true"
                 aria-label="Mobile Navigation"
               >
-                {/* Close inside panel */}
-                <div className="flex items-center justify-between px-5">
-                  <span className="sr-only">Navigation</span>
+                <div className="flex items-center justify-end px-5">
                   <motion.button
-                    ref={firstFocusableRef}
                     type="button"
                     onClick={() => setIsOpen(false)}
-                    whileHover={
-                      reducedMotion ? undefined : { rotate: 90, scale: 1.08 }
-                    }
+                    whileHover={reducedMotion ? undefined : { rotate: 90, scale: 1.08 }}
                     whileTap={reducedMotion ? undefined : { scale: 0.92 }}
-                    className="ml-auto flex items-center justify-center w-10 h-10
+                    className="flex items-center justify-center w-10 h-10
                       rounded-full bg-[#1a1a2e]/70
                       text-[#a78bfa] hover:text-white
                       hover:bg-[--accent]/40
@@ -411,7 +403,7 @@ export default function Navbar() {
                 {/* Menu items */}
                 <nav className="mt-2 px-5">
                   <ul className="flex flex-col gap-2 text-gray-200">
-                    {MENU.map((m, idx) => (
+                    {MENU.map((m) => (
                       <li key={m.id}>
                         <button
                           type="button"
@@ -422,14 +414,8 @@ export default function Navbar() {
                               activeSection === m.id
                                 ? "text-[#a78bfa] bg-white/5"
                                 : ""
-                            }
-                          `}
-                          // mark last focusable rough guess (last item -> then socials buttons)
-                          ref={
-                            idx === MENU.length - 1
-                              ? lastFocusableRef
-                              : undefined
-                          }
+                            }`}
+                          aria-current={activeSection === m.id ? "page" : undefined}
                         >
                           {m.label}
                         </button>
