@@ -1,8 +1,36 @@
-import React, { useState } from "react";
-import { projects } from "../../constants";
+import React, { useState, useEffect } from "react";
 
 const Work = () => {
   const [selectedProject, setSelectedProject] = useState(null);
+  const [projectsData, setProjectsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        // Mengambil data dari repository GitHub user "iqbalmusyaffa"
+        const response = await fetch("https://api.github.com/users/iqbalmusyaffa/repos?sort=updated&per_page=6");
+        const data = await response.json();
+        
+        const formattedProjects = data.map((repo) => ({
+          id: repo.id,
+          title: repo.name.replace(/-/g, " "),
+          description: repo.description || "No description provided.",
+          image: `https://opengraph.githubassets.com/1/iqbalmusyaffa/${repo.name}`, // Gambar open graph dari github
+          tags: repo.topics && repo.topics.length > 0 ? repo.topics : [repo.language].filter(Boolean),
+          github: repo.html_url,
+          webapp: repo.homepage || repo.html_url,
+        }));
+        setProjectsData(formattedProjects);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   const handleOpenModal = (project) => {
     setSelectedProject(project);
@@ -19,74 +47,76 @@ const Work = () => {
     >
       {/* Section Title */}
       <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold text-white">PROJECTS</h2>
-        <div className="w-32 h-1 bg-purple-500 mx-auto mt-4"></div>
-        <p className="text-gray-400 mt-4 text-lg font-semibold">
-          A showcase of the projects I have worked on, highlighting my skills
-          and experience in various technologies
+        <h2 className="text-4xl md:text-5xl font-heading font-bold text-white tracking-tight">PROJECTS</h2>
+        <div className="w-24 md:w-32 h-1 bg-[#8245ec] mx-auto mt-4 rounded-full"></div>
+        <p className="text-gray-400 mt-4 text-base sm:text-lg max-w-3xl mx-auto font-medium">
+          Beberapa proyek nyata (real-world projects) yang pernah saya bangun. Data di bawah ditarik langsung secara otomatis dari repositori GitHub saya.
         </p>
       </div>
 
       {/* Projects Grid */}
-      <div className="grid gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project) => (
-          <div
-            key={project.id}
-            onClick={() => handleOpenModal(project)}
-            className="border border-white bg-gray-900 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden cursor-pointer hover:shadow-purple-500/50 hover:-translate-y-2 transition-transform duration-300"
-          >
-            <div className="p-4">
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-48 object-cover rounded-xl"
-              />
-            </div>
-            <div className="p-6">
-              <h3 className="text-2xl font-bold text-white mb-2">
-                {project.title}
-              </h3>
-              <p className="text-gray-500 mb-4 pt-4 line-clamp-3">
-                {project.description}
-              </p>
-              <div className="mb-4">
-                {project.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="inline-block bg-[#251f38] text-xs font-semibold text-purple-500 rounded-full px-2 py-1 mr-2 mb-2"
-                  >
-                    {tag}
-                  </span>
-                ))}
+      {loading ? (
+        <div className="text-center text-white text-xl">Loading projects from GitHub...</div>
+      ) : (
+        <div className="grid gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          {projectsData.map((project) => (
+            <div
+              key={project.id}
+              onClick={() => handleOpenModal(project)}
+              className="border border-white bg-gray-900 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden cursor-pointer hover:shadow-purple-500/50 hover:-translate-y-2 transition-transform duration-300 flex flex-col"
+            >
+              <div className="p-4">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-48 object-cover rounded-xl bg-white"
+                />
+              </div>
+              <div className="p-6 flex-grow flex flex-col">
+                <h3 className="text-2xl font-bold text-white mb-2 capitalize">
+                  {project.title}
+                </h3>
+                <p className="text-gray-500 mb-4 pt-2 line-clamp-3 flex-grow">
+                  {project.description}
+                </p>
+                <div className="mb-4">
+                  {project.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="inline-block bg-[#251f38] text-xs font-semibold text-purple-500 rounded-full px-2 py-1 mr-2 mb-2"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Modal Container */}
       {selectedProject && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4">
-          <div className="bg-gray-900 rounded-xl shadow-2xl lg:w-full w-[90%] max-w-3xl overflow-hidden relative">
-            <div className="flex justify-end p-4">
-              <button
-                onClick={handleCloseModal}
-                className="text-white text-3xl font-bold hover:text-purple-500"
-              >
-                &times;
-              </button>
-            </div>
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black bg-opacity-90 p-4">
+          <button
+            onClick={handleCloseModal}
+            className="absolute top-4 right-4 md:top-8 md:right-8 text-white bg-gray-800 hover:bg-purple-600 rounded-full w-12 h-12 flex items-center justify-center text-4xl font-bold transition-all z-[10001]"
+            aria-label="Close modal"
+          >
+            &times;
+          </button>
 
+          <div className="bg-gray-900 rounded-xl shadow-2xl lg:w-full w-[90%] max-w-3xl overflow-hidden relative max-h-[90vh] overflow-y-auto">
             <div className="flex flex-col">
-              <div className="w-full flex justify-center bg-gray-900 px-4">
+              <div className="w-full flex justify-center bg-gray-900 px-4 pt-4">
                 <img
                   src={selectedProject.image}
                   alt={selectedProject.title}
-                  className="lg:w-full w-[95%] object-contain rounded-xl shadow-2xl"
+                  className="lg:w-full w-[95%] object-contain rounded-xl shadow-2xl bg-white"
                 />
               </div>
               <div className="lg:p-8 p-6">
-                <h3 className="lg:text-3xl font-bold text-white mb-4 text-md">
+                <h3 className="lg:text-3xl font-bold text-white mb-4 text-md capitalize">
                   {selectedProject.title}
                 </h3>
                 <p className="text-gray-400 mb-6 lg:text-base text-xs">
@@ -130,3 +160,4 @@ const Work = () => {
 };
 
 export default Work;
+

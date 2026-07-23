@@ -22,7 +22,7 @@ const Footer = () => {
             { name: "About", id: "about" },
             { name: "Skills", id: "skills" },
             { name: "Experience", id: "experience" },
-            { name: "Projects", id: "projects" },
+            { name: "Projects", id: "work" },
             { name: "Education", id: "education" },
           ].map((item, index) => (
             <button
@@ -59,7 +59,7 @@ const Footer = () => {
 
         {/* Copyright Text */}
         <p className="text-sm text-gray-400 mt-6">
-          © 2025 Iqbal Musyaffa. All rights reserved.
+          © {new Date().getFullYear()} Iqbal Musyaffa. All rights reserved. <br className="sm:hidden" /> Hosted by <a href="https://ganeshahost.my.id" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">ganeshahost.my.id</a>
         </p>
       </div>
     </footer>

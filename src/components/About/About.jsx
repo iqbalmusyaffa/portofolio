@@ -101,42 +101,41 @@ export default function About() {
             <motion.h1
               id="about-heading"
               variants={item}
-              className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight"
+              className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white leading-tight tracking-tight"
             >
-              Halo, I am
+              Halo, saya
             </motion.h1>
 
             <motion.p
               variants={item}
-              className="mt-1 text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight bg-gradient-to-r from-[#8245ec] via-violet-400 to-white bg-clip-text text-transparent"
+              className="mt-1 text-4xl sm:text-5xl md:text-6xl font-heading font-extrabold leading-tight tracking-tight bg-gradient-to-r from-[#8245ec] via-violet-400 to-white bg-clip-text text-transparent"
             >
-              Iqbal Musyaffa YusaBbih Lillah
+              Iqbal Musyaffa.
             </motion.p>
 
             <motion.div
               variants={item}
               className="mt-3 md:mt-2 text-xl sm:text-2xl md:text-3xl font-semibold leading-tight"
             >
-              <span className="text-white">I am a </span>
+              <span className="text-white">Seorang </span>
               {reduced ? (
-                <span className="text-[#a78bfa] align-middle">
-                  Fullstack Developer
+                <span className="text-[#a78bfa] align-middle font-heading">
+                  Software Engineer
                 </span>
               ) : (
                 <Suspense
                   fallback={
-                    <span className="text-[#a78bfa] align-middle">
-                      Fullstack Developer
+                    <span className="text-[#a78bfa] align-middle font-heading">
+                      Software Engineer
                     </span>
                   }
                 >
-                  <span className="align-middle">
+                  <span className="align-middle font-heading">
                     <ReactTypingEffect
                       text={[
+                        "Software Engineer",
                         "Fullstack Developer",
-                        "Front-End Developer",
-                        "Back-End Developer",
-                        "Mobile Developer",
+                        "Problem Solver"
                       ]}
                       speed={100}
                       eraseSpeed={50}
@@ -156,13 +155,13 @@ export default function About() {
 
             <motion.p
               variants={item}
-              className="mt-4 md:mt-5 text-base sm:text-lg text-gray-300 leading-relaxed max-w-2xl mx-auto md:mx-0"
+              className="mt-5 text-base sm:text-lg text-gray-300 leading-relaxed max-w-2xl mx-auto md:mx-0"
             >
-              Saya fresh graduate Telkom University Surabaya dengan minat besar pada
-              pengembangan website. Aktif di CODER IT Telkom Surabaya (workshop &amp; kepanitiaan),
-              pernah menjabat Sekretaris Divisi Mobile Developer. Berpengalaman membangun
-              aplikasi dengan Laravel &amp; React, dan terus belajar untuk memberikan dampak
-              nyata pada proyek dan tim.
+              Lulusan Universitas Telkom Surabaya yang senang menerjemahkan ide menjadi 
+              antarmuka web yang bersih dan efisien. Berpengalaman membangun aplikasi 
+              dengan ekosistem <strong>Laravel</strong> &amp; <strong>React</strong>. 
+              Fokus utama saya bukan sekadar menulis kode, tapi memberikan dampak 
+              nyata bagi pengguna dan tim.
             </motion.p>
 
             {/* CTA */}

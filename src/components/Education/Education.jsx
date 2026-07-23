@@ -48,10 +48,10 @@ const Education = () => {
     >
       {/* Section Title */}
       <motion.div className="text-center mb-16" variants={cardVariants}>
-        <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">EDUCATION</h2>
+        <h2 className="text-4xl md:text-5xl font-heading font-bold text-white tracking-tight">EDUCATION</h2>
         <div className="w-24 md:w-32 h-1 bg-[#8245ec] mx-auto mt-4 rounded-full"></div>
         <p className="text-gray-400 mt-4 text-base sm:text-lg max-w-3xl mx-auto font-medium">
-          My education has been a journey of learning and growth. Here’s a look at my academic background and achievements.
+          Selain eksplorasi mandiri, logika pemrograman dan pola pikir analitis saya ditempa melalui pendidikan formal di institusi berikut.
         </p>
       </motion.div>
 

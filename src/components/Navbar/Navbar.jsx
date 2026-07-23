@@ -9,13 +9,13 @@ import { FiMenu, FiX } from "react-icons/fi";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
-/* ================== Config ================== */
 const MENU = [
   { id: "about", label: "About" },
   { id: "skills", label: "Skills" },
   { id: "experience", label: "Experience" },
   { id: "education", label: "Education" },
   { id: "work", label: "Projects" },
+  { id: "contact", label: "Contact" },
 ];
 const BRAND = { first: "Iqbal", last: "Musyaffa" };
 const ACCENT = "#8245ec";
@@ -93,40 +93,34 @@ export default function Navbar() {
     });
   }, [navHeight]);
 
-  /* ======= Active section highlight (IntersectionObserver) ======= */
+  /* ======= Active section highlight (Scroll Position) ======= */
   useEffect(() => {
-    const sections = MENU.map((m) => document.getElementById(m.id)).filter(
-      Boolean
-    );
-    if (!sections.length) return;
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + navHeight + 150; // offset untuk memicu perubahan lebih awal
+      let currentSection = activeSection;
 
-    // rootMargin: top kompensasi navbar, bottom biar pindahnya stabil
-    const topOffset = navHeight + 12;
-    const bottomOffset = Math.max(window.innerHeight * 0.35, 220);
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        // pilih yang rasio interseksi paling tinggi
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]) {
-          const id = visible[0].target.id;
-          if (id !== activeSection) setActiveSection(id);
+      // Loop dari bawah ke atas untuk menemukan section terakhir yang offsetTop-nya terlewati
+      for (let i = MENU.length - 1; i >= 0; i--) {
+        const section = document.getElementById(MENU[i].id);
+        if (section) {
+          if (section.offsetTop <= scrollPosition) {
+            currentSection = MENU[i].id;
+            break;
+          }
         }
-      },
-      {
-        threshold: [0.25, 0.4, 0.6, 0.8],
-        root: null,
-        rootMargin: `-${topOffset}px 0px -${bottomOffset}px 0px`,
       }
-    );
 
-    sections.forEach((s) => io.observe(s));
-    return () => io.disconnect();
-    // jangan masukkan activeSection ke deps agar IO tidak recreate berulang
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navHeight]);
+      if (currentSection !== activeSection) {
+        setActiveSection(currentSection);
+      }
+    };
+
+    // Panggil sekali saat mount untuk set state awal
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [navHeight, activeSection]);
 
   /* ======= Smooth scroll ======= */
   const goTo = useCallback(

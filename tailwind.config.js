@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+        heading: ['"Space Grotesk"', 'sans-serif'],
+      },
       keyframes: {
         blob: {
           '0%': { transform: 'scale(1)' },
