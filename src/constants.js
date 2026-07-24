@@ -136,7 +136,14 @@ export const education = [
     location: "Banyuwangi",
   },
 ];
-
+export const customDescriptions = {
+  "portofolio": "Website portofolio interaktif yang dibangun menggunakan React dan Tailwind CSS. Terintegrasi dengan GitHub API untuk menampilkan proyek secara real-time dengan desain UI/UX modern.",
+  "company-profile-aneka": "Aplikasi company profile profesional yang dikembangkan menggunakan arsitektur modern. Memiliki tampilan responsif dan performa tinggi untuk mendukung branding perusahaan.",
+  "opensky-radar": "Sistem pelacakan dan monitoring radar interaktif. Proyek ini memproses dan memvisualisasikan data kompleks menjadi antarmuka yang mudah dipahami pengguna.",
+  "websewamobil": "Platform penyewaan mobil digital (Rent Car) end-to-end yang memudahkan pelanggan melakukan pemesanan kendaraan dengan antarmuka yang bersih dan user-friendly.",
+  "e-commerce-frontend": "Aplikasi antarmuka toko online (E-Commerce) yang modern. Dilengkapi dengan fitur keranjang belanja, katalog produk interaktif, dan pengalaman checkout yang mulus.",
+  "e-commerce-backend": "Layanan backend API (RESTful) untuk mendukung operasional E-Commerce. Menangani manajemen pengguna, autentikasi, transaksi, dan integrasi database secara efisien."
+};
 
 export const projects = [
   {

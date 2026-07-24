@@ -337,116 +337,117 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile: backdrop + off-canvas panel */}
-        <AnimatePresence>
-          {isOpen && (
-            <>
-              <motion.div
-                key="backdrop"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: reducedMotion ? 0 : 0.18 }}
-                className="fixed inset-0 z-[9998] bg-black/50 backdrop-blur-sm md:hidden"
-                onClick={() => setIsOpen(false)}
-                aria-hidden="true"
-              />
-              <motion.aside
-                key="panel"
-                ref={mobilePanelRef}
-                initial={{ x: "100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "100%" }}
-                transition={{
-                  type: "tween",
-                  duration: reducedMotion ? 0 : 0.24,
-                  ease: "easeOut",
-                }}
-                className="
-                  fixed right-0 top-0 z[10000] h-[100dvh] w-[82%] max-w-[360px]
-                  md:hidden bg-[#0b0a1a]/95 border-l border-white/10
-                  backdrop-blur-xl shadow-2xl
-                  pt-[calc(env(safe-area-inset-top)+16px)] pb-[calc(env(safe-area-inset-bottom)+16px)]
-                  flex flex-col
-                "
-                id="mobile-menu"
-                role="dialog"
-                aria-modal="true"
-                aria-label="Mobile Navigation"
-              >
-                <div className="flex items-center justify-end px-5">
-                  <motion.button
-                    type="button"
-                    onClick={() => setIsOpen(false)}
-                    whileHover={reducedMotion ? undefined : { rotate: 90, scale: 1.08 }}
-                    whileTap={reducedMotion ? undefined : { scale: 0.92 }}
-                    className="flex items-center justify-center w-10 h-10
-                      rounded-full bg-[#1a1a2e]/70
-                      text-[#a78bfa] hover:text-white
-                      hover:bg-[--accent]/40
-                      focus:outline-none focus:ring-2 focus:ring-[--accent]/50
-                      shadow-[0_0_10px_rgba(130,69,236,0.4)]
-                      backdrop-blur-md transition duration-300"
-                    aria-label="Close menu"
-                    style={{ ["--accent"]: ACCENT }}
-                  >
-                    <FiX className="text-2xl" />
-                  </motion.button>
-                </div>
-
-                {/* Menu items */}
-                <nav className="mt-2 px-5">
-                  <ul className="flex flex-col gap-2 text-gray-200">
-                    {MENU.map((m) => (
-                      <li key={m.id}>
-                        <button
-                          type="button"
-                          onClick={() => goTo(m.id)}
-                          className={`w-full text-left px-3 py-3 rounded-lg transition
-                            hover:bg-white/5 active:bg-white/10
-                            ${
-                              activeSection === m.id
-                                ? "text-[#a78bfa] bg-white/5"
-                                : ""
-                            }`}
-                          aria-current={activeSection === m.id ? "page" : undefined}
-                        >
-                          {m.label}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-
-                {/* Socials bottom */}
-                <div className="mt-auto px-5">
-                  <div className="h-px w-full bg-white/10 my-3" />
-                  <div className="flex items-center gap-4">
-                    <a
-                      href="https://github.com/iqbalmusyaffa"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-lg p-2 ring-1 ring-white/10 text-gray-300 hover:text-white hover:ring-white/25"
-                      aria-label="GitHub"
-                    >
-                      <FaGithub size={22} />
-                    </a>
-                    <a
-                      href="https://www.linkedin.com/in/iqbalmusyaffa"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-lg p-2 ring-1 ring-white/10 text-gray-300 hover:text-white hover:ring-white/25"
-                      aria-label="LinkedIn"
-                    >
-                      <FaLinkedin size={22} />
-                    </a>
-                  </div>
-                </div>
-              </motion.aside>
-            </>
-          )}
-        </AnimatePresence>
       </motion.nav>
+
+      {/* Mobile: backdrop + off-canvas panel */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: reducedMotion ? 0 : 0.18 }}
+              className="fixed inset-0 z-[9998] bg-black/50 backdrop-blur-sm md:hidden"
+              onClick={() => setIsOpen(false)}
+              aria-hidden="true"
+            />
+            <motion.aside
+              key="panel"
+              ref={mobilePanelRef}
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{
+                type: "tween",
+                duration: reducedMotion ? 0 : 0.24,
+                ease: "easeOut",
+              }}
+              className="
+                fixed right-0 top-0 z-[10000] h-[100dvh] w-[82%] max-w-[360px]
+                md:hidden bg-[#0b0a1a]/95 border-l border-white/10
+                backdrop-blur-xl shadow-2xl
+                pt-[calc(env(safe-area-inset-top)+16px)] pb-[calc(env(safe-area-inset-bottom)+16px)]
+                flex flex-col
+              "
+              id="mobile-menu"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile Navigation"
+            >
+              <div className="flex items-center justify-end px-5">
+                <motion.button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  whileHover={reducedMotion ? undefined : { rotate: 90, scale: 1.08 }}
+                  whileTap={reducedMotion ? undefined : { scale: 0.92 }}
+                  className="flex items-center justify-center w-10 h-10
+                    rounded-full bg-[#1a1a2e]/70
+                    text-[#a78bfa] hover:text-white
+                    hover:bg-[--accent]/40
+                    focus:outline-none focus:ring-2 focus:ring-[--accent]/50
+                    shadow-[0_0_10px_rgba(130,69,236,0.4)]
+                    backdrop-blur-md transition duration-300"
+                  aria-label="Close menu"
+                  style={{ ["--accent"]: ACCENT }}
+                >
+                  <FiX className="text-2xl" />
+                </motion.button>
+              </div>
+
+              {/* Menu items */}
+              <nav className="mt-2 px-5">
+                <ul className="flex flex-col gap-2 text-gray-200">
+                  {MENU.map((m) => (
+                    <li key={m.id}>
+                      <button
+                        type="button"
+                        onClick={() => goTo(m.id)}
+                        className={`w-full text-left px-3 py-3 rounded-lg transition
+                          hover:bg-white/5 active:bg-white/10
+                          ${
+                            activeSection === m.id
+                              ? "text-[#a78bfa] bg-white/5"
+                              : ""
+                          }`}
+                        aria-current={activeSection === m.id ? "page" : undefined}
+                      >
+                        {m.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              {/* Socials bottom */}
+              <div className="mt-auto px-5">
+                <div className="h-px w-full bg-white/10 my-3" />
+                <div className="flex items-center gap-4">
+                  <a
+                    href="https://github.com/iqbalmusyaffa"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-lg p-2 ring-1 ring-white/10 text-gray-300 hover:text-white hover:ring-white/25"
+                    aria-label="GitHub"
+                  >
+                    <FaGithub size={22} />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/iqbalmusyaffa"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-lg p-2 ring-1 ring-white/10 text-gray-300 hover:text-white hover:ring-white/25"
+                    aria-label="LinkedIn"
+                  >
+                    <FaLinkedin size={22} />
+                  </a>
+                </div>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { customDescriptions } from "../../constants";
 
 const ProjectCard = ({ project, onClick }) => {
   const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
@@ -47,7 +48,7 @@ const ProjectCard = ({ project, onClick }) => {
         <p className="text-gray-400 mb-4 pt-2 line-clamp-3 flex-grow text-sm sm:text-base leading-relaxed">
           {project.description}
         </p>
-        <div className="mb-2 flex flex-wrap gap-2">
+        <div className="mb-4 flex flex-wrap gap-2">
           {project.tags.map((tag, index) => (
             <span
               key={index}
@@ -56,6 +57,22 @@ const ProjectCard = ({ project, onClick }) => {
               {tag}
             </span>
           ))}
+        </div>
+        
+        {/* GitHub Stats */}
+        <div className="flex items-center gap-4 text-gray-400 text-sm mt-auto pt-4 border-t border-white/5">
+          <div className="flex items-center gap-1.5 hover:text-purple-400 transition-colors" title="Stars">
+            <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>{project.stars || 0}</span>
+          </div>
+          <div className="flex items-center gap-1.5 hover:text-purple-400 transition-colors" title="Forks">
+            <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7"></path><line x1="6" y1="9" x2="6" y2="21"></line></svg>
+            <span>{project.forks || 0}</span>
+          </div>
+          <div className="flex items-center gap-1.5 hover:text-purple-400 transition-colors" title="Commits">
+            <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3"></circle><line x1="3" y1="12" x2="9" y2="12"></line><line x1="15" y1="12" x2="21" y2="12"></line></svg>
+            <span>{project.commits || 0}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -66,33 +83,127 @@ const Work = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [projectsData, setProjectsData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        // Mengambil data dari repository GitHub user "iqbalmusyaffa"
-        const response = await fetch("https://api.github.com/users/iqbalmusyaffa/repos?sort=updated&per_page=6");
-        const data = await response.json();
+  const loadProjects = async (pageNumber) => {
+    try {
+      if (pageNumber === 1) setLoading(true);
+      else setLoadingMore(true);
+
+      const CACHE_KEY = `github_projects_page_${pageNumber}`;
+      const CACHE_EXPIRY = 60 * 60 * 1000; // 1 jam
+
+      const cachedData = localStorage.getItem(CACHE_KEY);
+      if (cachedData) {
+        const { data, timestamp } = JSON.parse(cachedData);
+        if (Date.now() - timestamp < CACHE_EXPIRY) {
+          if (data.length < 6) setHasMore(false);
+          setProjectsData(prev => pageNumber === 1 ? data : [...prev, ...data]);
+          setLoading(false);
+          setLoadingMore(false);
+          return;
+        }
+      }
+
+      // Mengambil data dari repository GitHub user "iqbalmusyaffa"
+      const response = await fetch(`https://api.github.com/users/iqbalmusyaffa/repos?sort=updated&per_page=6&page=${pageNumber}`);
+      const data = await response.json();
+      
+      if (!Array.isArray(data) || data.length === 0) {
+        if (pageNumber === 1 && !Array.isArray(data)) {
+          // Rate limit hit on page 1, use backup data
+          const backupProjects = [
+            { id: 1, name: "portofolio", description: "", topics: ["react", "tailwind"], language: "JavaScript", html_url: "https://github.com/iqbalmusyaffa/portofolio", stargazers_count: 0, forks_count: 0 },
+            { id: 2, name: "company-profile-aneka", description: "", topics: ["laravel", "blade"], language: "PHP", html_url: "https://github.com/iqbalmusyaffa/company-profile-aneka", stargazers_count: 0, forks_count: 0 },
+            { id: 3, name: "opensky-radar", description: "", topics: ["react", "api"], language: "JavaScript", html_url: "https://github.com/iqbalmusyaffa/opensky-radar", stargazers_count: 0, forks_count: 0 },
+            { id: 4, name: "websewamobil", description: "", topics: ["php", "mysql"], language: "PHP", html_url: "https://github.com/iqbalmusyaffa/websewamobil", stargazers_count: 0, forks_count: 0 },
+            { id: 5, name: "e-commerce-frontend", description: "", topics: ["react", "redux"], language: "JavaScript", html_url: "https://github.com/iqbalmusyaffa/e-commerce-frontend", stargazers_count: 0, forks_count: 0 },
+            { id: 6, name: "e-commerce-backend", description: "", topics: ["express", "mongodb"], language: "JavaScript", html_url: "https://github.com/iqbalmusyaffa/e-commerce-backend", stargazers_count: 0, forks_count: 0 }
+          ];
+          
+          const formattedBackup = backupProjects.map(repo => {
+            const customDesc = customDescriptions[repo.name];
+            return {
+              id: repo.id,
+              title: repo.name.replace(/-/g, " "),
+              description: customDesc || "Proyek pribadi yang menarik. Klik untuk melihat detail.",
+              image: `https://opengraph.githubassets.com/1/iqbalmusyaffa/${repo.name}`,
+              tags: repo.topics && repo.topics.length > 0 ? repo.topics : [repo.language].filter(Boolean),
+              github: repo.html_url,
+              webapp: repo.html_url,
+              stars: repo.stargazers_count,
+              forks: repo.forks_count,
+              commits: 0
+            };
+          });
+          setProjectsData(formattedBackup);
+        }
+        setHasMore(false);
+        return;
+      }
+
+      if (data.length < 6) {
+        setHasMore(false);
+      }
+      
+      // Fungsi untuk mengambil jumlah commit dari repo
+      const fetchCommitCount = async (repoName) => {
+        try {
+          const response = await fetch(`https://api.github.com/repos/iqbalmusyaffa/${repoName}/commits?per_page=1`);
+          const linkHeader = response.headers.get("Link");
+          if (linkHeader) {
+            const match = linkHeader.match(/page=(\d+)>; rel="last"/);
+            if (match && match[1]) {
+              return parseInt(match[1], 10);
+            }
+          }
+          const commitData = await response.json();
+          if (Array.isArray(commitData) && commitData.length > 0) return commitData.length;
+          return 0;
+        } catch (e) {
+          return 0;
+        }
+      };
+      
+      const formattedProjects = await Promise.all(data.map(async (repo) => {
+        const commits = await fetchCommitCount(repo.name);
+        const customDesc = customDescriptions[repo.name];
         
-        const formattedProjects = data.map((repo) => ({
+        return {
           id: repo.id,
           title: repo.name.replace(/-/g, " "),
-          description: repo.description || "No description provided.",
+          description: customDesc || repo.description || "Proyek pribadi yang menarik. Klik untuk melihat kode sumber dan detail lebih lanjut di GitHub.",
           image: `https://opengraph.githubassets.com/1/iqbalmusyaffa/${repo.name}`, // Gambar open graph dari github
           tags: repo.topics && repo.topics.length > 0 ? repo.topics : [repo.language].filter(Boolean),
           github: repo.html_url,
           webapp: repo.homepage || repo.html_url,
-        }));
-        setProjectsData(formattedProjects);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+          stars: repo.stargazers_count,
+          forks: repo.forks_count,
+          commits: commits,
+        };
+      }));
+      
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ data: formattedProjects, timestamp: Date.now() }));
+      setProjectsData(prev => pageNumber === 1 ? formattedProjects : [...prev, ...formattedProjects]);
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  };
 
-    fetchProjects();
+  useEffect(() => {
+    loadProjects(1);
   }, []);
+
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    loadProjects(nextPage);
+  };
 
   const handleOpenModal = (project) => {
     setSelectedProject(project);
@@ -120,11 +231,32 @@ const Work = () => {
       {loading ? (
         <div className="text-center text-white text-xl relative z-10 animate-pulse">Loading projects from GitHub...</div>
       ) : (
-        <div className="grid gap-8 sm:gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
-          {projectsData.map((project) => (
-            <ProjectCard key={project.id} project={project} onClick={handleOpenModal} />
-          ))}
-        </div>
+        <>
+          <div className="grid gap-8 sm:gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
+            {projectsData.map((project) => (
+              <ProjectCard key={project.id} project={project} onClick={handleOpenModal} />
+            ))}
+          </div>
+          
+          {hasMore && projectsData.length > 0 && (
+            <div className="flex justify-center mt-12 relative z-10">
+              <button
+                onClick={handleLoadMore}
+                disabled={loadingMore}
+                className="px-8 py-3 bg-purple-600/80 hover:bg-purple-500 text-white font-semibold rounded-full shadow-[0_0_20px_rgba(130,69,236,0.3)] hover:shadow-[0_0_30px_rgba(130,69,236,0.5)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {loadingMore ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Memuat...
+                  </>
+                ) : (
+                  "Selanjutnya"
+                )}
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {/* Modal Container */}
