@@ -2,6 +2,97 @@ import React from "react";
 import { experiences } from "../../constants";
 import { motion, useReducedMotion } from "framer-motion";
 
+const ExperienceCard = ({ experience, side, isEven, shouldReduceMotion, cardVariants }) => {
+  const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = React.useState(false);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  return (
+    <div
+      className={`relative flex flex-col sm:flex-row items-center mb-16 ${
+        isEven ? "sm:justify-end" : "sm:justify-start"
+      }`}
+    >
+      <motion.div
+        variants={cardVariants(side)}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.2 }}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className={`relative z-10 w-full sm:max-w-md p-6 sm:p-8 rounded-3xl border border-white/10
+        bg-[#0a0a1a]/80 backdrop-blur-xl shadow-2xl overflow-hidden group cursor-default transition-all duration-300 hover:-translate-y-2 hover:border-purple-500/30
+        ${isEven ? "sm:ml-0" : "sm:mr-0"} sm:ml-20 sm:mr-20 ml-8`}
+      >
+        {/* Spotlight Effect */}
+        <div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-500 z-0"
+          style={{
+            opacity: isHovered && !shouldReduceMotion ? 1 : 0,
+            background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(130, 69, 236, 0.15), transparent 40%)`,
+          }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10">
+          {/* Header (logo + text) */}
+          <div className="flex items-center gap-6">
+            <div className="w-16 h-16 bg-white rounded-xl overflow-hidden shrink-0 shadow-lg group-hover:scale-105 transition-transform">
+              <img
+                src={experience.img}
+                alt={`${experience.company} logo`}
+                className="w-full h-full object-cover p-1"
+                loading="lazy"
+              />
+            </div>
+
+            <div className="flex flex-col justify-between">
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-purple-400 transition-colors">
+                  {experience.role}
+                </h3>
+                <h4 className="text-sm font-medium text-gray-300 mt-1">
+                  {experience.company}
+                </h4>
+              </div>
+              <p className="text-xs font-semibold text-purple-400/80 mt-2 bg-purple-500/10 w-fit px-2 py-0.5 rounded-full ring-1 ring-purple-500/20">
+                {experience.date}
+              </p>
+            </div>
+          </div>
+
+          {/* Description */}
+          <p className="mt-5 text-gray-400 text-sm sm:text-base leading-relaxed">
+            {experience.desc}
+          </p>
+
+          {/* Skills */}
+          <div className="mt-6">
+            <div className="flex flex-wrap gap-2">
+              {experience.skills.map((skill, i) => (
+                <span
+                  key={`${experience.id}-skill-${i}`}
+                  className="bg-purple-500/10 text-purple-300 font-medium px-3 py-1 text-xs sm:text-sm rounded-full ring-1 ring-purple-500/20 transition-colors group-hover:bg-purple-500/20"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 const Experience = () => {
   const shouldReduceMotion = useReducedMotion();
 
@@ -38,15 +129,6 @@ const Experience = () => {
         x: 0,
         transition: { duration: 0.5, ease: "easeOut" },
       },
-      hover: shouldReduceMotion
-        ? {}
-        : {
-            y: -4,
-            scale: 1.02,
-            boxShadow:
-              "0 0 24px 2px rgba(130,69,236,0.35), 0 10px 30px rgba(0,0,0,0.25)",
-            transition: { type: "spring", stiffness: 260, damping: 16 },
-          },
     };
   };
 
@@ -62,11 +144,10 @@ const Experience = () => {
     >
       {/* Section Title */}
       <motion.div className="text-center mb-16" variants={sectionVariants}>
-        <h2 className="text-4xl font-bold text-white">EXPERIENCE</h2>
-        <div className="w-32 h-1 bg-purple-500 mx-auto mt-4"></div>
-        <p className="text-gray-400 mt-4 text-lg font-semibold">
-          A collection of my work experience and the roles I have taken in
-          various organizations
+        <h2 className="text-4xl md:text-5xl font-heading font-bold text-white tracking-tight">EXPERIENCE</h2>
+        <div className="w-24 md:w-32 h-1 bg-[#8245ec] mx-auto mt-4 rounded-full shadow-[0_0_15px_rgba(130,69,236,0.6)]"></div>
+        <p className="text-gray-400 mt-4 text-base sm:text-lg max-w-3xl mx-auto font-medium">
+          Perjalanan karier dan pengalaman profesional saya dalam membangun solusi berbasis teknologi.
         </p>
       </motion.div>
 
@@ -74,7 +155,7 @@ const Experience = () => {
       <div className="relative">
         {/* Garis vertikal tetap ada */}
         <motion.div
-          className="pointer-events-none absolute sm:left-1/2 left-0 transform -translate-x-1/2 sm:-translate-x-0 w-[3px] bg-white/60 h-full rounded z-0"
+          className="pointer-events-none absolute sm:left-1/2 left-0 transform -translate-x-1/2 sm:-translate-x-0 w-[3px] bg-gradient-to-b from-purple-500/20 via-purple-500/80 to-purple-500/20 h-full rounded z-0"
           variants={lineVariants}
         />
 
@@ -84,85 +165,14 @@ const Experience = () => {
           const side = isEven ? "left" : "right";
 
           return (
-            <div
-              key={experience.id}
-              className={`relative flex flex-col sm:flex-row items-center mb-16 ${
-                isEven ? "sm:justify-end" : "sm:justify-start"
-              }`}
-            >
-              {/* Card */}
-              <motion.div
-                variants={cardVariants(side)}
-                initial="hidden"
-                whileInView="show"
-                whileHover="hover"
-                viewport={{ once: true, amount: 0.2 }}
-                className={`relative z-10 w-full sm:max-w-md p-4 sm:p-8 rounded-2xl border border-white/10
-                bg-gray-900/80 backdrop-blur-md shadow-[0_0_20px_1px_rgba(130,69,236,0.2)]
-                ${isEven ? "sm:ml-0" : "sm:mr-0"} sm:ml-20 sm:mr-20 ml-8`}
-              >
-                {/* Header (logo + text) */}
-                <div className="flex items-center gap-6">
-                  <div className="w-16 h-16 bg-white rounded-md overflow-hidden shrink-0">
-                    <img
-                      src={experience.img}
-                      alt={`${experience.company} logo`}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-
-                  <div className="flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-xl sm:text-2xl font-semibold text-white">
-                        {experience.role}
-                      </h3>
-                      <h4 className="text-sm text-gray-300">
-                        {experience.company}
-                      </h4>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-2">
-                      {experience.date}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <motion.p
-                  className="mt-4 text-gray-300 leading-relaxed"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ delay: 0.1, duration: 0.4 }}
-                  viewport={{ once: true }}
-                >
-                  {experience.desc}
-                </motion.p>
-
-                {/* Skills */}
-                <motion.div
-                  className="mt-4"
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
-                >
-                  <h5 className="font-medium text-white">Skills:</h5>
-                  <ul className="flex flex-wrap mt-2">
-                    {experience.skills.map((skill, i) => (
-                      <motion.li
-                        key={`${experience.id}-skill-${i}`}
-                        className="bg-[#8245ec] text-gray-100 px-4 py-1 text-xs sm:text-sm rounded-lg mr-2 mb-2 border border-gray-400/40"
-                        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: i * 0.06 }}
-                        viewport={{ once: true }}
-                      >
-                        {skill}
-                      </motion.li>
-                    ))}
-                  </ul>
-                </motion.div>
-              </motion.div>
-            </div>
+            <ExperienceCard 
+              key={experience.id} 
+              experience={experience} 
+              side={side} 
+              isEven={isEven} 
+              shouldReduceMotion={shouldReduceMotion} 
+              cardVariants={cardVariants} 
+            />
           );
         })}
       </div>

@@ -69,87 +69,96 @@ export default function Skills() {
         </p>
       </motion.div>
 
-      {/* Skill Categories */}
+      {/* Skill Categories (Bento Grid) */}
       <motion.div
-        className="flex flex-wrap gap-4 lg:gap-6 justify-between"
+        className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.2 }}
         variants={gridStagger}
       >
-        {SkillsInfo.map((category) => (
-          <motion.article
-            key={category.title}
-            variants={card}
-            className="
-              bg-gray-900/80 backdrop-blur-md px-5 sm:px-8 py-6 sm:py-7
-              w-full sm:w-[48%] rounded-2xl border border-white/10
-              shadow-[0_0_18px_1px_rgba(130,69,236,0.25)]
-              transition-transform
-              focus-within:ring-2 focus-within:ring-[#8245ec]/60
-            "
-          >
-            <h3 className="text-xl sm:text-2xl font-semibold text-gray-300 mb-5 text-center">
-              {category.title}
-            </h3>
+        {SkillsInfo.map((category, index) => {
+          // Menentukan posisi Bento Grid berdasarkan index
+          let gridClass = "";
+          if (index === 0) gridClass = "md:col-span-2 md:row-span-2"; // Frontend
+          else if (index === 1) gridClass = "md:col-span-1 md:row-span-1"; // Backend
+          else if (index === 2) gridClass = "md:col-span-1 md:row-span-1"; // Languages
+          else if (index === 3) gridClass = "md:col-span-3 md:row-span-1"; // Tools
 
-            {/* Tilt + Grid */}
-            <Tilt
-              tiltMaxAngleX={12}
-              tiltMaxAngleY={12}
-              perspective={900}
-              scale={1.02}
-              transitionSpeed={900}
-              gyroscope
-              glareEnable
-              glareMaxOpacity={0.12}
-              glareBorderRadius="1rem"
-              className="will-change-transform"
+          return (
+            <motion.article
+              key={category.title}
+              variants={card}
+              className={`
+                bg-gray-900/40 backdrop-blur-xl px-5 sm:px-8 py-6 sm:py-7
+                w-full rounded-3xl border border-white/10
+                shadow-[0_4px_30px_rgba(0,0,0,0.1)]
+                transition-all duration-500
+                hover:bg-gray-900/60 hover:border-purple-500/30
+                focus-within:ring-2 focus-within:ring-[#8245ec]/60
+                flex flex-col justify-start
+                ${gridClass}
+              `}
             >
-              <motion.div
-                className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3"
-                variants={gridStagger}
+              <h3 className="text-xl sm:text-2xl font-heading font-semibold text-white mb-6 text-center md:text-left">
+                {category.title}
+              </h3>
+
+              {/* Grid for individual skills */}
+              <Tilt
+                tiltMaxAngleX={8}
+                tiltMaxAngleY={8}
+                perspective={1000}
+                scale={1}
+                transitionSpeed={1000}
+                gyroscope
+                className="will-change-transform flex-grow"
               >
-                {category.skills.map((skill) => (
-                  <motion.button
-                    key={skill.name}
-                    type="button"
-                    variants={item}
-                    whileHover={{
-                      y: -2,
-                      scale: 1.03,
-                      transition: { type: "spring", stiffness: 350, damping: 18 },
-                    }}
-                    whileTap={{ scale: 0.98 }}
-                    className="
-                      group flex items-center justify-center gap-2
-                      bg-transparent border border-gray-700/80
-                      rounded-3xl py-2.5 px-2.5 sm:py-2 sm:px-3
-                      text-center outline-none
-                      hover:border-[#8245ec]/70
-                      hover:shadow-[0_0_0_3px_rgba(130,69,236,0.15)]
-                      focus-visible:ring-2 focus-visible:ring-[#8245ec]/60
-                      transition-all
-                    "
-                    aria-label={skill.name}
-                  >
-                    <img
-                      src={skill.logo}
-                      alt=""
-                      aria-hidden="true"
-                      className="w-6 h-6 sm:w-7 sm:h-7 opacity-90 group-hover:opacity-100"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <span className="text-xs sm:text-sm text-gray-300 group-hover:text-white">
-                      {skill.name}
-                    </span>
-                  </motion.button>
-                ))}
-              </motion.div>
-            </Tilt>
-          </motion.article>
-        ))}
+                <motion.div
+                  className="flex flex-wrap gap-3 justify-center md:justify-start"
+                  variants={gridStagger}
+                >
+                  {category.skills.map((skill) => (
+                    <motion.button
+                      key={skill.name}
+                      type="button"
+                      variants={item}
+                      whileHover={{
+                        y: -3,
+                        scale: 1.05,
+                        transition: { type: "spring", stiffness: 400, damping: 10 },
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                      className="
+                        group flex items-center justify-center gap-2
+                        bg-white/5 border border-white/10
+                        rounded-full py-2 px-4
+                        text-center outline-none
+                        hover:bg-white/10 hover:border-purple-500/50
+                        hover:shadow-[0_0_15px_rgba(130,69,236,0.3)]
+                        focus-visible:ring-2 focus-visible:ring-[#8245ec]/60
+                        transition-all duration-300
+                      "
+                      aria-label={skill.name}
+                    >
+                      <img
+                        src={skill.logo}
+                        alt=""
+                        aria-hidden="true"
+                        className="w-5 h-5 sm:w-6 sm:h-6 opacity-80 group-hover:opacity-100 drop-shadow-md"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <span className="text-sm font-medium text-gray-300 group-hover:text-white">
+                        {skill.name}
+                      </span>
+                    </motion.button>
+                  ))}
+                </motion.div>
+              </Tilt>
+            </motion.article>
+          );
+        })}
       </motion.div>
     </section>
   );
