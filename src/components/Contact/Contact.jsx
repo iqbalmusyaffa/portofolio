@@ -55,8 +55,8 @@ const Contact = () => {
       <ToastContainer />
 
       {/* Section Title */}
-      <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold text-white">CONTACT</h2>
+      <div className="text-center mb-16 relative z-10">
+        <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#a78bfa] via-[#e879f9] to-[#a78bfa] animate-gradient-x">CONTACT</h2>
         <div className="w-32 h-1 bg-purple-500 mx-auto mt-4"></div>
         <p className="text-gray-400 mt-4 text-lg font-semibold">
           I’d love to hear from you—reach out for any opportunities or questions!
@@ -64,47 +64,47 @@ const Contact = () => {
       </div>
 
       {/* Contact Form */}
-      <div className="mt-8 w-full max-w-md bg-[#0d081f] p-6 rounded-lg shadow-lg border border-gray-700">
-        <h3 className="text-xl font-semibold text-white text-center">
+      <div className="mt-8 w-full max-w-md bg-gray-900/40 backdrop-blur-xl p-8 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-white/10 relative z-10">
+        <h3 className="text-2xl font-bold text-white text-center mb-6">
           Connect With Me <span className="ml-1">🚀</span>
         </h3>
 
-        <form ref={form} onSubmit={sendEmail} className="mt-4 flex flex-col space-y-4">
+        <form ref={form} onSubmit={sendEmail} className="flex flex-col space-y-5">
           <input
             type="email"
             name="user_email"
             placeholder="Your Email"
             required
-            className="w-full p-3 rounded-md bg-[#131025] text-white border border-gray-600 focus:outline-none focus:border-purple-500"
+            className="w-full p-3.5 rounded-xl bg-white/5 text-white placeholder-gray-400 border border-white/10 focus:outline-none focus:border-purple-500/50 focus:bg-white/10 focus:ring-2 focus:ring-purple-500/20 transition-all"
           />
           <input
             type="text"
             name="user_name"
             placeholder="Your Name"
             required
-            className="w-full p-3 rounded-md bg-[#131025] text-white border border-gray-600 focus:outline-none focus:border-purple-500"
+            className="w-full p-3.5 rounded-xl bg-white/5 text-white placeholder-gray-400 border border-white/10 focus:outline-none focus:border-purple-500/50 focus:bg-white/10 focus:ring-2 focus:ring-purple-500/20 transition-all"
           />
           <input
             type="text"
             name="subject"
             placeholder="Subject"
             required
-            className="w-full p-3 rounded-md bg-[#131025] text-white border border-gray-600 focus:outline-none focus:border-purple-500"
+            className="w-full p-3.5 rounded-xl bg-white/5 text-white placeholder-gray-400 border border-white/10 focus:outline-none focus:border-purple-500/50 focus:bg-white/10 focus:ring-2 focus:ring-purple-500/20 transition-all"
           />
           <textarea
             name="message"
             placeholder="Message"
             rows="4"
             required
-            className="w-full p-3 rounded-md bg-[#131025] text-white border border-gray-600 focus:outline-none focus:border-purple-500"
+            className="w-full p-3.5 rounded-xl bg-white/5 text-white placeholder-gray-400 border border-white/10 focus:outline-none focus:border-purple-500/50 focus:bg-white/10 focus:ring-2 focus:ring-purple-500/20 transition-all resize-none"
           />
           
           {/* Send Button */}
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-purple-600 to-pink-500 py-3 text-white font-semibold rounded-md hover:opacity-90 transition"
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 py-3.5 mt-2 text-white font-bold rounded-xl hover:shadow-[0_0_20px_rgba(130,69,236,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
-            Send
+            Send Message
           </button>
         </form>
       </div>

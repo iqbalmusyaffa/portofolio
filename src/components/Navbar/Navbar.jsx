@@ -84,14 +84,7 @@ export default function Navbar() {
   const reducedMotion = useReducedMotionPref();
   const isScrolled = useRafScrollFlag(50);
 
-  /* ======= Apply scroll-margin-top to targets (kompensasi nav) ======= */
-  useEffect(() => {
-    const offset = navHeight + 10; // kecilkan atau besarkan sesuai selera
-    MENU.forEach((m) => {
-      const el = document.getElementById(m.id);
-      if (el) el.style.scrollMarginTop = `${offset}px`;
-    });
-  }, [navHeight]);
+  /* ======= Remove scrollMarginTop (now using manual scrollTo) ======= */
 
   /* ======= Active section highlight (Scroll Position) ======= */
   useEffect(() => {
@@ -128,13 +121,17 @@ export default function Navbar() {
       setIsOpen(false);
       const el = document.getElementById(id);
       if (!el) return;
-      // karena kita sudah set scrollMarginTop, cukup call scrollIntoView
-      el.scrollIntoView({
-        behavior: reducedMotion ? "auto" : "smooth",
-        block: "start",
+      
+      const offset = navHeight + 20; // Additional padding above title
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: reducedMotion ? "auto" : "smooth"
       });
     },
-    [reducedMotion]
+    [reducedMotion, navHeight]
   );
 
   /* ======= ESC & klik di luar untuk menutup ======= */

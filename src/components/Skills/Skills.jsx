@@ -55,7 +55,7 @@ export default function Skills() {
       >
         <h2
           id="skills-title"
-          className="text-3xl sm:text-4xl font-bold text-white tracking-tight"
+          className="text-3xl sm:text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#a78bfa] via-[#e879f9] to-[#a78bfa] animate-gradient-x"
         >
           SKILLS
         </h2>

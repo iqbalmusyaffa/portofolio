@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { FiMail } from "react-icons/fi";
 import profileImage from "../../assets/foto2.jpg";
+import MagneticButton from "../MagneticButton/MagneticButton";
 
 // ✅ Lazy-load libraries
 const ReactTypingEffect = lazy(() => import("react-typing-effect"));
@@ -130,7 +131,7 @@ export default function About() {
                     </span>
                   }
                 >
-                  <span className="align-middle font-heading">
+                  <span className="align-middle font-heading inline-block min-w-[220px] md:min-w-[280px] text-left">
                     <ReactTypingEffect
                       text={[
                         "Software Engineer",
@@ -167,40 +168,46 @@ export default function About() {
             {/* CTA */}
             <motion.div
               variants={item}
-              className="mt-6 flex flex-wrap items-center gap-3 justify-center md:justify-start"
+              className="mt-8 flex flex-col sm:flex-row flex-wrap items-center gap-4 sm:gap-3 justify-center md:justify-start w-full"
             >
-              <a
-                href="https://drive.google.com/drive/folders/1Pot8GeUM6s_4J7n_8VlcULaMaycx1sD4?usp=sharing"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full px-6 sm:px-7 py-2.5 sm:py-3 text-base md:text-lg font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8245ec] focus:ring-offset-transparent transition-transform duration-300 hover:scale-[1.03] active:scale-95"
-                style={{
-                  background: "linear-gradient(90deg, #8245ec, #a855f7)",
-                  boxShadow:
-                    "0 0 2px #8245ec, 0 0 2px #8245ec, 0 0 36px rgba(130,69,236,0.5)",
-                }}
-                aria-label="Download CV of Iqbal Musyaffa"
-              >
-                DOWNLOAD CV
-              </a>
+              <MagneticButton>
+                <a
+                  href="https://drive.google.com/drive/folders/1Pot8GeUM6s_4J7n_8VlcULaMaycx1sD4?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-full px-6 sm:px-7 py-3 sm:py-3 text-base md:text-lg font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8245ec] focus:ring-offset-transparent transition-transform duration-300 hover:scale-[1.03] active:scale-95"
+                  style={{
+                    background: "linear-gradient(90deg, #8245ec, #a855f7)",
+                    boxShadow:
+                      "0 0 2px #8245ec, 0 0 2px #8245ec, 0 0 36px rgba(130,69,236,0.5)",
+                  }}
+                  aria-label="Download CV of Iqbal Musyaffa"
+                >
+                  DOWNLOAD CV
+                </a>
+              </MagneticButton>
 
               {/* gunakan <a> agar bisa ctrl/cmd+click, tidak memaksa window.location */}
-              <a
-                href={`mailto:${EMAIL}`}
-                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm md:text-base font-semibold text-white/90 ring-1 ring-white/15 hover:ring-white/25 hover:text-white transition"
-              >
-                <FiMail className="text-lg" />
-                Email Me
-              </a>
+              <MagneticButton>
+                <a
+                  href={`mailto:${EMAIL}`}
+                  className="w-full sm:w-auto justify-center inline-flex items-center gap-2 rounded-full px-6 sm:px-5 py-3 sm:py-2.5 text-base font-semibold text-white/90 ring-1 ring-white/15 hover:ring-white/25 hover:text-white transition"
+                >
+                  <FiMail className="text-lg" />
+                  Email Me
+                </a>
+              </MagneticButton>
 
               {/* tombol copy email terpisah (opsional) */}
-              <button
-                onClick={copyEmail}
-                className="inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold text-white/90 ring-1 ring-white/10 hover:ring-white/25 hover:text-white transition"
-                aria-label="Copy email to clipboard"
-              >
-                Copy Email
-              </button>
+              <MagneticButton>
+                <button
+                  onClick={copyEmail}
+                  className="w-full sm:w-auto justify-center inline-flex items-center rounded-full px-6 sm:px-4 py-3 sm:py-2.5 text-base sm:text-sm font-semibold text-white/90 ring-1 ring-white/10 hover:ring-white/25 hover:text-white transition"
+                  aria-label="Copy email to clipboard"
+                >
+                  Copy Email
+                </button>
+              </MagneticButton>
             </motion.div>
           </motion.div>
 
@@ -212,12 +219,16 @@ export default function About() {
           >
             <Suspense
               fallback={
-                <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-[26rem] md:h-[26rem] rounded-full bg-white/5 animate-pulse" />
+                <div className="w-44 h-44 sm:w-56 sm:h-56 md:w-[26rem] md:h-[26rem] rounded-full bg-white/5 animate-pulse" />
               }
             >
-              <Tilt
-                className="w-40 h-40 sm:w-56 sm:h-56 md:w-[26rem] md:h-[26rem]"
-                tiltMaxAngleX={reduced ? 0 : 18}
+              <motion.div
+                animate={reduced ? {} : { y: [0, -15, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Tilt
+                  className="w-44 h-44 sm:w-56 sm:h-56 md:w-[26rem] md:h-[26rem]"
+                  tiltMaxAngleX={reduced ? 0 : 18}
                 tiltMaxAngleY={reduced ? 0 : 18}
                 perspective={1100}
                 scale={reduced ? 1 : 1.04}
@@ -246,7 +257,8 @@ export default function About() {
                   <img
                     src={profileImage}
                     alt="Foto profil Iqbal Musyaffa YusaBbih Lillah"
-                    loading="lazy"
+                    fetchpriority="high"
+                    loading="eager"
                     decoding="async"
                     className="relative w-full h-full rounded-full object-cover shadow-2xl"
                     sizes="(max-width: 640px) 10rem, (max-width: 768px) 14rem, 26rem"
@@ -254,9 +266,10 @@ export default function About() {
                   />
 
                   {/* Inner glow */}
-                  <div className="pointer-events-none absolute inset-0 rounded-full shadow-[0_10px_30px_rgba(130,69,236,0.35)]" />
+                  <div className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_0_20px_rgba(130,69,236,0.3)]" />
                 </div>
               </Tilt>
+              </motion.div>
             </Suspense>
           </motion.div>
         </div>

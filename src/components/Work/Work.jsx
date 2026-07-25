@@ -1,5 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { customDescriptions } from "../../constants";
+import { motion } from "framer-motion";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 260,
+      damping: 20
+    }
+  }
+};
 
 const ProjectCard = ({ project, onClick }) => {
   const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
@@ -14,7 +38,8 @@ const ProjectCard = ({ project, onClick }) => {
   };
 
   return (
-    <div
+    <motion.div
+      variants={itemVariants}
       onClick={() => onClick(project)}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
@@ -75,7 +100,7 @@ const ProjectCard = ({ project, onClick }) => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -220,7 +245,7 @@ const Work = () => {
     >
       {/* Section Title */}
       <div className="text-center mb-16 relative z-10">
-        <h2 className="text-4xl md:text-5xl font-heading font-bold text-white tracking-tight">PROJECTS</h2>
+        <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#a78bfa] via-[#e879f9] to-[#a78bfa] animate-gradient-x">PROJECTS</h2>
         <div className="w-24 md:w-32 h-1 bg-[#8245ec] mx-auto mt-4 rounded-full shadow-[0_0_15px_rgba(130,69,236,0.6)]"></div>
         <p className="text-gray-400 mt-4 text-base sm:text-lg max-w-3xl mx-auto font-medium">
           Beberapa proyek nyata (real-world projects) yang pernah saya bangun. Data di bawah ditarik langsung secara otomatis dari repositori GitHub saya.
@@ -232,11 +257,17 @@ const Work = () => {
         <div className="text-center text-white text-xl relative z-10 animate-pulse">Loading projects from GitHub...</div>
       ) : (
         <>
-          <div className="grid gap-8 sm:gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
+          <motion.div 
+            className="grid gap-8 sm:gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.1 }}
+          >
             {projectsData.map((project) => (
               <ProjectCard key={project.id} project={project} onClick={handleOpenModal} />
             ))}
-          </div>
+          </motion.div>
           
           {hasMore && projectsData.length > 0 && (
             <div className="flex justify-center mt-12 relative z-10">
