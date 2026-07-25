@@ -18,6 +18,8 @@ import vscodeLogo from "./assets/tech_logo/vscode.png";
 import postmanLogo from "./assets/tech_logo/postman.png";
 import figmaLogo from "./assets/tech_logo/figma.png";
 import vercelLogo from "./assets/tech_logo/vercel.png";
+import nextjsLogo from "./assets/tech_logo/nextjs.svg";
+import sqliteLogo from "./assets/tech_logo/sqlite.svg";
 
 // Experience Section Logo's
 import maxyLogo from "./assets/company_logo/maxy.png";
@@ -48,6 +50,7 @@ export const SkillsInfo = [
       { name: "SASS", logo: sassLogo },
       { name: "JavaScript", logo: javascriptLogo },
       { name: "React JS", logo: reactjsLogo },
+      { name: "Next JS", logo: nextjsLogo },
       { name: "Tailwind CSS", logo: tailwindcssLogo },
       { name: "Bootstrap", logo: bootstrapLogo },
     ],
@@ -58,6 +61,7 @@ export const SkillsInfo = [
       { name: "Node JS", logo: nodejsLogo },
       { name: "Express JS", logo: expressjsLogo },
       { name: "MySQL", logo: mysqlLogo },
+      { name: "SQLite", logo: sqliteLogo },
       { name: "Laravel", logo: laravelLogo },
       { name: "Firebase", logo: firebaseLogo },
     ],
