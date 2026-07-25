@@ -145,6 +145,14 @@ export const customDescriptions = {
   "e-commerce-backend": "Layanan backend API (RESTful) untuk mendukung operasional E-Commerce. Menangani manajemen pengguna, autentikasi, transaksi, dan integrasi database secara efisien."
 };
 
+export const customLiveUrls = {
+  "company-profile-aneka": "https://anekajaya.my.id/",
+  "portofolio": "https://iqbalmusyaffa.my.id/",
+  "websewamobil": "https://autorent.iqbaldeveloper.my.id/",
+  "e-commerce-frontend": "https://store.iqbaldeveloper.my.id/",
+  "e-commerce-backend": "https://apistore.iqbaldeveloper.my.id/admin/login"
+};
+
 export const projects = [
   {
     id: 0,

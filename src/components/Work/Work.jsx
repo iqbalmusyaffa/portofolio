@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { customDescriptions } from "../../constants";
+import { customDescriptions, customLiveUrls } from "../../constants";
 import { motion } from "framer-motion";
 
 const containerVariants = {
@@ -117,7 +117,7 @@ const Work = () => {
       if (pageNumber === 1) setLoading(true);
       else setLoadingMore(true);
 
-      const CACHE_KEY = `github_projects_page_${pageNumber}`;
+      const CACHE_KEY = `github_projects_v2_page_${pageNumber}`;
       const CACHE_EXPIRY = 60 * 60 * 1000; // 1 jam
 
       const cachedData = localStorage.getItem(CACHE_KEY);
@@ -157,7 +157,7 @@ const Work = () => {
               image: `https://opengraph.githubassets.com/1/iqbalmusyaffa/${repo.name}`,
               tags: repo.topics && repo.topics.length > 0 ? repo.topics : [repo.language].filter(Boolean),
               github: repo.html_url,
-              webapp: repo.html_url,
+              webapp: customLiveUrls[repo.name] || repo.html_url,
               stars: repo.stargazers_count,
               forks: repo.forks_count,
               commits: 0
@@ -203,7 +203,7 @@ const Work = () => {
           image: `https://opengraph.githubassets.com/1/iqbalmusyaffa/${repo.name}`, // Gambar open graph dari github
           tags: repo.topics && repo.topics.length > 0 ? repo.topics : [repo.language].filter(Boolean),
           github: repo.html_url,
-          webapp: repo.homepage || repo.html_url,
+          webapp: customLiveUrls[repo.name] || repo.homepage || repo.html_url,
           stars: repo.stargazers_count,
           forks: repo.forks_count,
           commits: commits,
