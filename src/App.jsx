@@ -6,6 +6,7 @@ import Skills from "./components/Skills/Skills";
 import Experience from "./components/Experience/Experience";
 import Work from "./components/Work/Work";
 import Education from "./components/Education/Education";
+import Certifications from "./components/Certifications/Certifications";
 import Contact from "./components/Contact/Contact";
 import Footer from "./components/Footer/Footer";
 import BlurBlob from './components/BlurBlob';
@@ -36,6 +37,7 @@ const App = () => {
         <Skills />
         <Experience />
         <Education />
+        <Certifications />
         <Work />
         <Contact />
         <Footer />

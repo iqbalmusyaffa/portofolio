@@ -258,3 +258,38 @@ export const projects = [
     webapp: "https://removeyourbg.netlify.app/",
   },
 ];
+
+export const certifications = [
+  {
+    id: 0,
+    title: "Backend Developer (Bootcamp Project)",
+    issuer: "PT. Linkdataku Solusi Indonesia (Maxy Academy)",
+    date: "July 2024",
+    image: "https://placehold.co/600x400/1a1a2e/8245ec?text=Sertifikat+1&font=montserrat",
+    link: "#",
+  },
+  {
+    id: 1,
+    title: "Full Stack Developer (Internship)",
+    issuer: "PT PastiDjadi",
+    date: "November 2024",
+    image: "https://placehold.co/600x400/1a1a2e/8245ec?text=Sertifikat+2&font=montserrat",
+    link: "#",
+  },
+  {
+    id: 2,
+    title: "Dasar Pemrograman Web",
+    issuer: "Dicoding Indonesia",
+    date: "Agustus 2023",
+    image: "https://placehold.co/600x400/1a1a2e/8245ec?text=Sertifikat+3&font=montserrat",
+    link: "#",
+  },
+  {
+    id: 3,
+    title: "Belajar Membuat Aplikasi Web dengan React",
+    issuer: "Dicoding Indonesia",
+    date: "September 2023",
+    image: "https://placehold.co/600x400/1a1a2e/8245ec?text=Sertifikat+4&font=montserrat",
+    link: "#",
+  },
+];

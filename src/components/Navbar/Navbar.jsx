@@ -14,6 +14,7 @@ const MENU = [
   { id: "skills", label: "Skills" },
   { id: "experience", label: "Experience" },
   { id: "education", label: "Education" },
+  { id: "certifications", label: "Certifications" },
   { id: "work", label: "Projects" },
   { id: "contact", label: "Contact" },
 ];
@@ -210,7 +211,7 @@ export default function Navbar() {
         role="navigation"
         aria-label="Main Navigation"
         className={`fixed top-0 w-full z-[9999] transition
-          px-[7vw] md:px-[7vw] lg:px-[20vw]
+          px-[5vw] lg:px-[8vw] xl:px-[12vw]
           ${
             isScrolled
               ? "bg-[#050414]/60 backdrop-blur-md shadow-md"
@@ -220,12 +221,12 @@ export default function Navbar() {
         initial="initial"
         animate="show"
       >
-        <div className="text-white py-4 md:py-5 flex justify-between items-center">
+        <div className="text-white py-4 md:py-5 flex justify-between items-center gap-8">
           {/* Logo/Brand */}
           <motion.button
             type="button"
             onClick={() => goTo(MENU[0].id)}
-            className="text-lg md:text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-[--accent] rounded"
+            className="text-lg md:text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-[--accent] rounded whitespace-nowrap flex-shrink-0"
             whileTap={reducedMotion ? undefined : { scale: 0.98 }}
             style={{ ["--accent"]: ACCENT }}
             aria-label={`Go to ${MENU[0].label}`}
@@ -238,7 +239,7 @@ export default function Navbar() {
           </motion.button>
 
           {/* Desktop Menu */}
-          <ul className="relative hidden md:flex items-center gap-8 text-gray-300">
+          <ul className="relative hidden lg:flex items-center gap-5 xl:gap-8 text-gray-300 text-sm xl:text-base">
             {MENU.map((m, i) => {
               const isActive = activeSection === m.id;
               return (
@@ -317,7 +318,7 @@ export default function Navbar() {
           </ul>
 
           {/* Mobile Toggle */}
-          <div className="md:hidden relative z-[10001]">
+          <div className="lg:hidden relative z-[10001]">
             <motion.button
               ref={toggleRef}
               type="button"
@@ -346,7 +347,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: reducedMotion ? 0 : 0.18 }}
-              className="fixed inset-0 z-[9998] bg-black/50 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-[9998] bg-black/50 backdrop-blur-sm lg:hidden"
               onClick={() => setIsOpen(false)}
               aria-hidden="true"
             />
@@ -363,7 +364,7 @@ export default function Navbar() {
               }}
               className="
                 fixed right-0 top-0 z-[10000] h-[100dvh] w-[82%] max-w-[360px]
-                md:hidden bg-[#0b0a1a]/95 border-l border-white/10
+                lg:hidden bg-[#0b0a1a]/95 border-l border-white/10
                 backdrop-blur-xl shadow-2xl
                 pt-[calc(env(safe-area-inset-top)+16px)] pb-[calc(env(safe-area-inset-bottom)+16px)]
                 flex flex-col
