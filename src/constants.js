@@ -21,6 +21,25 @@ import vercelLogo from "./assets/tech_logo/vercel.png";
 import nextjsLogo from "./assets/tech_logo/nextjs.svg";
 import sqliteLogo from "./assets/tech_logo/sqlite.svg";
 
+import certPlaceholder from "./assets/sertif/placeholder.jpg";
+import certSertifVirtualIntershipIqbalMusyaffaYusaBbihLillahPDF from './assets/sertif/Sertif  Virtual Intership Iqbal Musyaffa Yusa Bbih Lillah.pdf';
+import certSertifAIPraktisuntukProduktivitasPDF from './assets/sertif/Sertif AI Praktis untuk Produktivitas.pdf';
+import certSertifBelajarDasarAIPDF from './assets/sertif/Sertif Belajar Dasar AI.pdf';
+import certSertifBelajarDasarClouddanGenAIdiAWSPDF from './assets/sertif/Sertif Belajar Dasar Cloud dan Gen AI di AWS.pdf';
+import certSertifBelajarDasarDataSciencePDF from './assets/sertif/Sertif Belajar Dasar Data Science.pdf';
+import certSertifBelajarDasarPemrogramanWebPDF from './assets/sertif/Sertif Belajar Dasar Pemrograman Web.pdf';
+import certSertifBelajarDasarStructuredQueryLanguageSQLPDF from './assets/sertif/Sertif Belajar Dasar Structured Query Language (SQL).pdf';
+import certSertifBelajarDasarVisualisasiDataPDF from './assets/sertif/Sertif Belajar Dasar Visualisasi Data.pdf';
+import certSertifEthicalHackerForDummiesPDF from './assets/sertif/Sertif Ethical Hacker For Dummies.pdf';
+import certSertifHKiPDF from './assets/sertif/Sertif HKi.pdf';
+import certSertifintroductiontoCyberSecurityandCareerAwarenessPDF from './assets/sertif/Sertif introduction to Cyber Security and Career Awareness.pdf';
+import certSertifIntroductiontoFinancialLiteracyPDF from './assets/sertif/Sertif Introduction to Financial Literacy.pdf';
+import certsertifmajuaiPDF from './assets/sertif/sertif majuai.pdf';
+import certSertifMaxyIqbalMusyaffaYusaBbihLillahPDF from './assets/sertif/Sertif Maxy Iqbal Musyaffa Yusa Bbih Lillah.pdf';
+import certSertifMemulaiPemrogramandenganPythonPDF from './assets/sertif/Sertif Memulai Pemrograman dengan Python.pdf';
+import certSertifMsofficePDF from './assets/sertif/Sertif Ms office.pdf';
+import certSertifPromptEngineeringuntukSoftwareDeveloperPDF from './assets/sertif/Sertif Prompt Engineering untuk Software Developer.pdf';
+
 // Experience Section Logo's
 import maxyLogo from "./assets/company_logo/maxy.png";
 import pastijadiLogo from "./assets/company_logo/pastijadi2.jpg";
@@ -261,35 +280,139 @@ export const projects = [
 
 export const certifications = [
   {
-    id: 0,
-    title: "Backend Developer (Bootcamp Project)",
-    issuer: "PT. Linkdataku Solusi Indonesia (Maxy Academy)",
-    date: "July 2024",
-    image: "https://placehold.co/600x400/1a1a2e/8245ec?text=Sertifikat+1&font=montserrat",
-    link: "#",
-  },
-  {
     id: 1,
-    title: "Full Stack Developer (Internship)",
-    issuer: "PT PastiDjadi",
-    date: "November 2024",
-    image: "https://placehold.co/600x400/1a1a2e/8245ec?text=Sertifikat+2&font=montserrat",
-    link: "#",
+    title: "Virtual Internship",
+    issuer: "PT. Deus Digital Transformasi Universal",
+    date: "29 April - 30 Juni 2024",
+    image: certPlaceholder,
+    link: certSertifVirtualIntershipIqbalMusyaffaYusaBbihLillahPDF,
   },
   {
     id: 2,
-    title: "Dasar Pemrograman Web",
+    title: "AI Praktis untuk Produktivitas",
     issuer: "Dicoding Indonesia",
-    date: "Agustus 2023",
-    image: "https://placehold.co/600x400/1a1a2e/8245ec?text=Sertifikat+3&font=montserrat",
-    link: "#",
+    date: "21 Juni 2025",
+    image: certPlaceholder,
+    link: certSertifAIPraktisuntukProduktivitasPDF,
   },
   {
     id: 3,
-    title: "Belajar Membuat Aplikasi Web dengan React",
+    title: "Belajar Dasar AI",
     issuer: "Dicoding Indonesia",
-    date: "September 2023",
-    image: "https://placehold.co/600x400/1a1a2e/8245ec?text=Sertifikat+4&font=montserrat",
-    link: "#",
+    date: "25 April 2025",
+    image: certPlaceholder,
+    link: certSertifBelajarDasarAIPDF,
+  },
+  {
+    id: 4,
+    title: "Belajar Dasar Cloud dan Gen AI di AWS",
+    issuer: "Dicoding Indonesia",
+    date: "25 April 2025",
+    image: certPlaceholder,
+    link: certSertifBelajarDasarClouddanGenAIdiAWSPDF,
+  },
+  {
+    id: 5,
+    title: "Belajar Dasar Data Science",
+    issuer: "Dicoding Indonesia",
+    date: "26 April 2025",
+    image: certPlaceholder,
+    link: certSertifBelajarDasarDataSciencePDF,
+  },
+  {
+    id: 6,
+    title: "Belajar Dasar Pemrograman Web",
+    issuer: "Dicoding Indonesia",
+    date: "19 Juli 2026",
+    image: certPlaceholder,
+    link: certSertifBelajarDasarPemrogramanWebPDF,
+  },
+  {
+    id: 7,
+    title: "Belajar Dasar Structured Query Language (SQL)",
+    issuer: "Dicoding Indonesia",
+    date: "26 April 2025",
+    image: certPlaceholder,
+    link: certSertifBelajarDasarStructuredQueryLanguageSQLPDF,
+  },
+  {
+    id: 8,
+    title: "Belajar Dasar Visualisasi Data",
+    issuer: "Dicoding Indonesia",
+    date: "26 April 2025",
+    image: certPlaceholder,
+    link: certSertifBelajarDasarVisualisasiDataPDF,
+  },
+  {
+    id: 9,
+    title: "Ethical Hacker For Dummies",
+    issuer: "Digital Talent Scholarship (Komdigi)",
+    date: "21 Oktober 2025",
+    image: certPlaceholder,
+    link: certSertifEthicalHackerForDummiesPDF,
+  },
+  {
+    id: 10,
+    title: "Sertifikat Hak Kekayaan Intelektual (HKI)",
+    issuer: "Universitas Telkom",
+    date: "28 Juni 2024",
+    image: certPlaceholder,
+    link: certSertifHKiPDF,
+  },
+  {
+    id: 11,
+    title: "Introduction to Cyber Security and Career Awareness",
+    issuer: "Digital Talent Scholarship (Komdigi)",
+    date: "7 November 2025",
+    image: certPlaceholder,
+    link: certSertifintroductiontoCyberSecurityandCareerAwarenessPDF,
+  },
+  {
+    id: 12,
+    title: "Introduction to Financial Literacy",
+    issuer: "Dicoding Indonesia",
+    date: "27 Januari 2026",
+    image: certPlaceholder,
+    link: certSertifIntroductiontoFinancialLiteracyPDF,
+  },
+  {
+    id: 13,
+    title: "AI Productivity and AI API Integration",
+    issuer: "Maju.ai",
+    date: "23 Sept - 22 Oct 2025",
+    image: certPlaceholder,
+    link: certsertifmajuaiPDF,
+  },
+  {
+    id: 14,
+    title: "Bootcamp Bersertifikat Backend",
+    issuer: "Maxy Academy",
+    date: "25 Mei 2024 - 20 Juli 2024",
+    image: certPlaceholder,
+    link: certSertifMaxyIqbalMusyaffaYusaBbihLillahPDF,
+  },
+  {
+    id: 15,
+    title: "Memulai Pemrograman dengan Python",
+    issuer: "Dicoding Indonesia",
+    date: "19 Juli 2026",
+    image: certPlaceholder,
+    link: certSertifMemulaiPemrogramandenganPythonPDF,
+  },
+  {
+    id: 16,
+    title: "Sertifikat Ms Office",
+    issuer: "YUREKA EDUCATION CENTER (YEC)",
+    date: "23-07-2026",
+    image: certPlaceholder,
+    link: certSertifMsofficePDF,
+  },
+  {
+    id: 17,
+    title: "Prompt Engineering untuk Software Developer",
+    issuer: "Dicoding Indonesia",
+    date: "19 Juli 2026",
+    image: certPlaceholder,
+    link: certSertifPromptEngineeringuntukSoftwareDeveloperPDF,
   },
 ];
