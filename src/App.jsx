@@ -1,5 +1,6 @@
 import React from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
+import Preloader from "./components/Preloader";
 import Navbar from "./components/Navbar/Navbar";
 import About from "./components/About/About";
 import Skills from "./components/Skills/Skills";
@@ -21,6 +22,7 @@ const App = () => {
 
   return (
     <div className="bg-[#050414] min-h-screen">
+      <Preloader />
       {/* Scroll Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-indigo-500 origin-left z-[10002]"

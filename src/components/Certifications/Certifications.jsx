@@ -73,6 +73,7 @@ const CertificationCard = ({ cert, onClick }) => {
 const Certifications = () => {
   const [selectedCert, setSelectedCert] = useState(null);
   const [visibleCount, setVisibleCount] = useState(6);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const handleOpenModal = (cert) => {
     setSelectedCert(cert);
@@ -83,7 +84,11 @@ const Certifications = () => {
   };
 
   const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 6);
+    setIsLoadingMore(true);
+    setTimeout(() => {
+      setVisibleCount((prev) => prev + 6);
+      setIsLoadingMore(false);
+    }, 800);
   };
 
   return (
@@ -114,9 +119,21 @@ const Certifications = () => {
         <div className="flex justify-center mt-12 relative z-10">
           <button
             onClick={handleLoadMore}
-            className="px-8 py-3 bg-purple-600/80 hover:bg-purple-500 text-white font-semibold rounded-full shadow-[0_0_20px_rgba(130,69,236,0.3)] hover:shadow-[0_0_30px_rgba(130,69,236,0.5)] transition-all duration-300 flex items-center gap-2"
+            disabled={isLoadingMore}
+            className={`px-8 py-3 rounded-full font-semibold flex items-center justify-center gap-2 transition-all duration-300 ${
+              isLoadingMore 
+                ? 'bg-purple-600/50 text-white cursor-wait' 
+                : 'bg-purple-600/80 hover:bg-purple-500 text-white shadow-[0_0_20px_rgba(130,69,236,0.3)] hover:shadow-[0_0_30px_rgba(130,69,236,0.5)]'
+            }`}
           >
-            Lebih Banyak
+            {isLoadingMore ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <span>Memuat...</span>
+              </>
+            ) : (
+              "Lebih Banyak"
+            )}
           </button>
         </div>
       )}
